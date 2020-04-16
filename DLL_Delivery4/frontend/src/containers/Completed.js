@@ -47,8 +47,15 @@ const assesmentsCompleted=[
 class StudentHome extends Component{
 
     state={
-
+        logout:false,
+        changePassword:false
     }
+    changePassword=()=>{
+        console.log('changepwd')
+        this.setState({
+            changePassword:true
+        })
+    };
 
     onLogout=()=>{
         console.log('here')
@@ -63,12 +70,12 @@ class StudentHome extends Component{
             <Nav
                 user="Student"
                 onLogout={this.onLogout}
-
+                changePassword={this.changePassword}
             >
                 <Assesments
                 completedArr={assesmentsCompleted}
                 />
-
+            {this.state.changePassword===true?<Redirect to='/changepassword' />:null}
             {this.state.logout===true?<Redirect to='/login' />:null}
             
 

@@ -82,6 +82,7 @@ class StudentHome extends Component{
         todoSelected:null,
         todoResponses:null,
         logout:false,
+        changePassword:false,
         createModal:false,
 
         studentName: null,
@@ -197,7 +198,12 @@ class StudentHome extends Component{
         })
     }
 
-
+    changePassword=()=>{
+        console.log('changepwd')
+        this.setState({
+            changePassword:true
+        })
+    };
 
     // LOGOUT
       onLogout=()=>{
@@ -215,6 +221,7 @@ class StudentHome extends Component{
         return(
             <Nav
                 user="Professor"
+                changePassword={this.changePassword}
                 onLogout={this.onLogout}
 
             >
@@ -262,7 +269,7 @@ class StudentHome extends Component{
                     handleClose={this.handleCloseNot}
                 
                 />
-
+            {this.state.changePassword===true?<Redirect to='/changepassword' />:null}
             {this.state.logout===true?<Redirect to='/login' />:null}
 
             </Nav>

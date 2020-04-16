@@ -72,7 +72,7 @@ class StudentHome extends Component{
         todoResponses:null,
         logout:false,
         createModal:false,
-
+        changePassword:false,
         assessmentName: null,
         assesmentDueDate:null,
         notification:false,
@@ -155,7 +155,12 @@ class StudentHome extends Component{
         })
       };
 
-
+    changePassword=()=>{
+        console.log('changepwd')
+        this.setState({
+            changePassword:true
+        })
+    };
 
     // LOGOUT
       onLogout=()=>{
@@ -174,7 +179,7 @@ class StudentHome extends Component{
             <Nav
                 user="Professor"
                 onLogout={this.onLogout}
-
+                changePassword={this.changePassword}
             >
                 <Assesments
                 toGrade={toGrade}
@@ -207,7 +212,7 @@ class StudentHome extends Component{
                     handleClose={this.handleCloseNot}
                 
                 />
-
+            {this.state.changePassword===true?<Redirect to='/changepassword' />:null}
             {this.state.logout===true?<Redirect to='/login' />:null}
 
             </Nav>

@@ -9,7 +9,8 @@ import {
     CompletedAssesments,
     ProfessorHome,
     AllAssesmentProfessor,
-    Teams
+    Teams,
+    ChangePassword
 } from '../containers'
 
 // import LostPage from './components/404/404'
@@ -30,6 +31,7 @@ export default class BusWaysRoutes extends React.Component{
         this._isMounted=false
     }
     render(){
+        console.log('routing')
         return(
             <BrowserRouter>
                 <Switch>
@@ -42,7 +44,7 @@ export default class BusWaysRoutes extends React.Component{
                     <Route exact path='/professorHome' component={ProfessorHome} />
                     <Route exact path='/professorHome/assessments' component={AllAssesmentProfessor}/>
                     <Route exact path='/professorHome/teams' component={Teams}/>
-
+                    <Route exact path='/changepassword' component={ChangePassword}/>
 
 
 

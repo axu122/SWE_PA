@@ -15,7 +15,7 @@ function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
          Boston College
-  
+
         {new Date().getFullYear()}
         {'.'}
       </Typography>
@@ -23,7 +23,7 @@ function Copyright() {
   }
 
 const useStyles = makeStyles(theme => ({
- 
+
   image: {
     backgroundImage: StudyingStudent,
     backgroundRepeat: 'no-repeat',
@@ -62,8 +62,8 @@ export default function SignInSide(props) {
       {/* <CssBaseline /> */}
       <Hidden smDown  >
           <Grid item  md={7} >
-            <img src={StudyingStudent} alt='studying' style={{width:'120vh'}}/>    
-              
+            <img src={StudyingStudent} alt='studying' style={{width:'120vh'}}/>
+
           </Grid>
       </Hidden>
       <Grid item xs={12} sm={12} md={5} component={Paper} elevation={6} square>
@@ -72,18 +72,19 @@ export default function SignInSide(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Professor Login
+            Change Password
           </Typography>
-          <form className={classes.form} noValidate onSubmit={props.loginHandler}>
+          <form className={classes.form} noValidate onSubmit={props.changePasswordHandler}>
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              id="professorEmail"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="currentPassword"
+              label="Current Password"
+              type="password"
+              name="currentPassword"
+              autoComplete="currentPassword"
               autoFocus
               onChange={props.textHandler}
 
@@ -93,11 +94,24 @@ export default function SignInSide(props) {
               margin="normal"
               required
               fullWidth
-              name="password"
-              label="Password"
+              name="newPassword"
+              label="New password"
               type="password"
-              id="professorPassword"
-              autoComplete="current-password"
+              id="newPassword"
+              autoComplete="newPassword"
+              onChange={props.textHandler}
+
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm password"
+              type="password"
+              id="confirmPassword"
+              autoComplete="confirmPassword"
               onChange={props.textHandler}
 
             />
@@ -107,10 +121,10 @@ export default function SignInSide(props) {
               variant="contained"
               color="primary"
               className={classes.submit}
-              disabled={props.email!==null && props.pass!==null?false:true}
-              onClick={props.loginHandler}
+              disabled={props.currentPassword!==null && props.pass!==null?false:true}
+              onClick={props.changePasswordHandler}
             >
-              LogIn
+              Confirm Change
             </Button>
 
             <Button
@@ -121,9 +135,9 @@ export default function SignInSide(props) {
               className={classes.back}
               onClick={props.handleBack}
             >
-              Back
+              Back To Home
             </Button>
-            
+
             <Box mt={5}>
                 {Copyright}
             </Box>

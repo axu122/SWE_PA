@@ -142,6 +142,9 @@ export default function Dashboard(props) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             {/* Dashboard */}
           </Typography>
+          <Button color='primary' variant='outlined' onClick={props.changePassword}>
+              Change Password
+          </Button>
           <Button color='primary' variant='outlined' onClick={props.onLogout}>
               Logout
           </Button>

@@ -17,7 +17,7 @@ import StudyingStudent from '../../Assets/studying.svg'
 function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
-          Group ¯\_(ツ)_/¯
+          Boston College 
   
         {new Date().getFullYear()}
         {'.'}

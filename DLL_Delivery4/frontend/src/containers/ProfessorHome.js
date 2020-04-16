@@ -14,9 +14,15 @@ import Nav from '../components/NavBar'
 class StudentHome extends Component{
 
     state={
-        logout:false
+        logout:false,
+        changePassword:false
     }
-
+    changePassword=()=>{
+        console.log('changepwd')
+        this.setState({
+            changePassword:true
+        })
+    };
     onLogout=()=>{
         console.log('here')
         this.setState({
@@ -29,10 +35,11 @@ class StudentHome extends Component{
       
         return(
             <Nav
+                changePassword={this.changePassword}
                 onLogout={this.onLogout}
             >
                 <HomePage />
-
+            {this.state.changePassword===true?<Redirect to='/changepassword' />:null}
             {this.state.logout===true?<Redirect to='/login' />:null}
 
             </Nav>

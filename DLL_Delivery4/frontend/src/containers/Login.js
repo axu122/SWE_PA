@@ -117,7 +117,7 @@ class Login extends Component{
             var valid = 'F';
             //get csrf token in order to not have request blocked
             var csrftoken = getCookie('csrftoken');
-
+//            emailData = this.state.studentEmail.toLowerCase()
             //Using axios to write post request to Django server that is handled in requestHandler.py to validate
             axios.post('/validate/',{
                 email: this.state.studentEmail.toLowerCase(),
@@ -129,8 +129,12 @@ class Login extends Component{
                     'X-CSRFToken': csrftoken
                 }
             }).then((response) => {
-                  valid = response.data
+                  var responseData = response.data
+                  valid = responseData[0]
+                  var emailData = responseData[1]
                   console.log(response.data);
+                  console.log(valid);
+                  console.log(emailData);
 
                 if(valid=='F'){
                     this.setState({
@@ -141,6 +145,8 @@ class Login extends Component{
                     // *--------- ADD TOKEN ----------------*
                     // localStorage.setItem('token',login.data.token)
                     localStorage.setItem('userType','Student')
+                    localStorage.setItem('userEmail',emailData)
+                    console.log("local storage set email")
                     this.setState({
                         studentRedirect:true
                     })
@@ -155,6 +161,7 @@ class Login extends Component{
             var valid = 'F';
 
             var csrftoken = getCookie('csrftoken');
+//            emailData = this.state.professorEmail.toLowerCase()
             axios.post('/validate/',{
                 email: this.state.professorEmail.toLowerCase(),
                 pwd: this.state.professorPassword,
@@ -165,9 +172,12 @@ class Login extends Component{
                     'X-CSRFToken': csrftoken
                 }
             }).then((response) => {
-                  valid = response.data
+                  var responseData = response.data
+                  valid = responseData[0]
+                  var emailData = responseData[1]
                   console.log(response.data);
-
+                  console.log(valid);
+                  console.log(emailData);
                 if(valid=='F'){
                     this.setState({
                         wrongCredentials:true
@@ -177,6 +187,7 @@ class Login extends Component{
                     // *--------- ADD TOKEN ----------------*
                     // localStorage.setItem('token',login.data.token)
                     localStorage.setItem('userType','Professor')
+                    localStorage.setItem('userEmail',emailData)
                     this.setState({
                         professorRedirect:true
                     })
