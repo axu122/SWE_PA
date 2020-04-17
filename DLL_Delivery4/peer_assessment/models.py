@@ -22,20 +22,15 @@ class User(models.Model):
         if not (eagle_id.isdigit() and len(eagle_id) == 8):
             raise ValidationError('%(id)s must be 8 digits',
                                   params={'id': eagle_id}, )
-    # def default_pwd(self):
-    #     s=""
-    #     l = list()
-    #     for i in range(8):
-    #         l[i] = random.randint(0,9)
-    #     return s.join(l)
-
-    default_pwd = '12345678'
+    def default_pwd():
+        r = random.randint(11111111,99999999)
+        return str(r)
 
     first_name = models.CharField(max_length=100, null=False)
     last_name = models.CharField(max_length=100, null=False)
     email = models.EmailField(max_length=100, unique=True, null=False)
     password = models.CharField(
-        max_length=100, null=False, default=default_pwd)
+        max_length=100, null=False, default= default_pwd())
     eagle_id = models.CharField(verbose_name="id", max_length=8, validators=[validate_digit_length],
                                 unique=True, null=False, primary_key=True)
     type = models.CharField(max_length=1, choices=USER_TYPES, null=False)
@@ -45,11 +40,15 @@ class User(models.Model):
 
 
 class Question(models.Model):
+    def __str__(self):
+        return self.question
     question_id = models.CharField(max_length=100, primary_key=True)
     question = models.CharField(max_length=100, null=False)
 
 
 class Group(models.Model):
+    def __str__(self):
+        return self.group_name
     group_id = models.CharField(max_length=100, primary_key=True)
     num_students = models.CharField(max_length=100, unique=False, null=False)
     group_name = models.CharField(max_length=100, unique=True, null=False)
@@ -68,6 +67,9 @@ class GroupOne(models.Model):
 
 
 class Class(models.Model):
+    def __str__(self):
+        return self.class_name
+
     class_id = models.CharField(max_length=100, primary_key=True)
     teacher_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -76,6 +78,9 @@ class Class(models.Model):
 
 
 class Assignment(models.Model):
+    def __str__(self):
+        return self.assignment_name
+
     assignment_id = models.CharField(max_length=100, primary_key=100)
 
     assignment_name = models.CharField(max_length=100)
@@ -86,10 +91,14 @@ class Assignment(models.Model):
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
 
 class Eval_set(models.Model):
+    def __str__(self):
+        return self.student_name + " " + self.eval_set_id
     eval_set_id = models.CharField(max_length=100, null=False, primary_key=True)
     student_name = models.CharField(max_length=100, null=False)
 
 class Grader(models.Model):
+    def __str__(self):
+        return self.grader_name 
     assignment_id = models.OneToOneField(Assignment, on_delete=models.CASCADE)
     eval_set_id = models.OneToOneField(Eval_set, on_delete=models.CASCADE)
     grader_name = models.CharField(max_length=100, null=False)
@@ -108,10 +117,6 @@ class QuestionOne(models.Model):
     qset_id = models.ForeignKey(Assignment, on_delete=models.CASCADE)
 
     key_3 = models.CharField(max_length=100, primary_key=True)
-
-
-
-
 
 
 class GraderOne(models.Model):
