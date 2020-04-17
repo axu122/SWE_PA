@@ -36,6 +36,80 @@ class User(models.Model):
     email = models.EmailField(max_length=100, unique=True, null=False)
     password = models.CharField(
         max_length=100, null=False, default=default_pwd)
-    eagle_id = models.CharField(verbose_name="id", max_length=8,
-                                validators=[validate_digit_length], unique=True, null=False)
+    eagle_id = models.CharField(verbose_name="id", max_length=8, validators=[validate_digit_length],
+                                unique=True, null=False, primary_key=True)
     type = models.CharField(max_length=1, choices=USER_TYPES, null=False)
+
+
+class GroupOne(models.Model):
+    def validate_digit_length(eagle_id):
+        if not (eagle_id.isdigit() and len(eagle_id) == 8):
+            raise ValidationError('%(id)s must be 8 digits',
+                                  params={'id': eagle_id}, )
+
+    eagle_id = models.CharField(verbose_name="id", max_length=8, validators=[
+                                validate_digit_length], null=False)
+    key_1 = models.CharField(max_length=100, primary_key=True)
+    group_id = models.CharField(max_length=100, unique=False)
+
+
+class Group(models.Model):
+    group_id = models.CharField(max_length=100, primary_key=True)
+    num_students = models.CharField(max_length=100, unique=False, null=False)
+    group_name = models.CharField(max_length=100, unique=True, null=False)
+
+
+class AssignmentOne(models.Model):
+    group_id = models.CharField(max_length=100, unique=False)
+    assignment_id = models.CharField(max_length=100, unique=False)
+    key_2 = models.CharField(max_length=100, primary_key=True)
+
+class Assignment(models.Model):
+    assignment_id = models.CharField(max_length=100, primary_key=100)
+    assignment_name = models.CharField(max_length=100, null=False)
+    creation_date = models.DateField(auto_now=True)
+    due_date = models.DateField(auto_now=False)
+    completion = models.BooleanField()
+    qset_id = models.CharField(max_length=100, null=False)
+    class_id = models.CharField(max_length=100, null=False)
+
+class QuestionOne(models.Model):
+    question_id = models.CharField(max_length=100, null=False)
+    qset_id = models.CharField(max_length=100, null=False)
+    key_3 = models.CharField(max_length=100, primary_key=True)
+    
+class Question(models.Model):
+    question_id = models.CharField(max_length=100, primary_key=True)
+    question = models.CharField(max_length=100, null = False)
+
+class Class(models.Model):
+    class_id = models.CharField(max_length=100, primary_key=True)
+    teacher_id = models.CharField(max_length=100, null = False)
+    professor_name = models.CharField(max_length=100, null = False)
+    class_name = models.CharField(max_length=100, null = False)
+
+class Eval_set(models.Model):
+    eval_set_id = models.CharField(max_length=100, primary_key=True)
+    student_name = models.CharField(max_length=100, null = False)
+
+class Grader(models.Model):
+    assignment_id = models.CharField(max_length=100, null = False)
+    eval_set_id = models.CharField(max_length=100, null = False)
+    grader_name = models.CharField(max_length=100, null = False)
+    key_5 = models.CharField(max_length=100, primary_key=True)
+
+class GraderOne(models.Model):
+    grader_id = models.CharField(max_length=100, null = False)
+    assignment_id = models.CharField(max_length=100, null = False)
+    key_4 = models.CharField(max_length=100, primary_key=True)
+
+
+
+    
+
+
+
+
+
+    
+
