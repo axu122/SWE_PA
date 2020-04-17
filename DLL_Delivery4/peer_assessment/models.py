@@ -41,14 +41,12 @@ class User(models.Model):
     type = models.CharField(max_length=1, choices=USER_TYPES, null=False)
 
 
-
 ################################################
 
-class GroupOne(models.Model):
-    eagle_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    group_id = models.ForeignKey(Group,on_delete=models.CASCADE)
 
-    key_1 = models.CharField(max_length=100, primary_key=True)
+class Question(models.Model):
+    question_id = models.CharField(max_length=100, primary_key=True)
+    question = models.CharField(max_length=100, null=False)
 
 
 class Group(models.Model):
@@ -57,11 +55,25 @@ class Group(models.Model):
     group_name = models.CharField(max_length=100, unique=True, null=False)
 
 
-class AssignmentOne(models.Model):
-    group_id = models.ForeignKey(Group, on_delete=models.CASCADE)
-    assignment_id = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+class GroupOne(models.Model):
+    def validate_digit_length(eagle_id):
+        if not (eagle_id.isdigit() and len(eagle_id) == 8):
+            raise ValidationError('%(id)s must be 8 digits',
+                                  params={'id': eagle_id}, )
 
-    key_2 = models.CharField(max_length=100, primary_key=True)
+    eagle_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    group_id = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+    key_1 = models.CharField(max_length=100, primary_key=True)
+
+
+class Class(models.Model):
+    class_id = models.CharField(max_length=100, primary_key=True)
+    teacher_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    professor_name = models.CharField(max_length=100, null=False)
+    class_name = models.CharField(max_length=100, null=False)
+
 
 class Assignment(models.Model):
     assignment_id = models.CharField(max_length=100, primary_key=100)
@@ -73,45 +85,36 @@ class Assignment(models.Model):
     qset_id = models.CharField(max_length=100, null=False)
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
 
+class Eval_set(models.Model):
+    eval_set_id = models.CharField(max_length=100, null=False, primary_key=True)
+    student_name = models.CharField(max_length=100, null=False)
+
+class Grader(models.Model):
+    assignment_id = models.OneToOneField(Assignment, on_delete=models.CASCADE)
+    eval_set_id = models.OneToOneField(Eval_set, on_delete=models.CASCADE)
+    grader_name = models.CharField(max_length=100, null=False)
+    key_5 = models.CharField(max_length=100, primary_key=True)
+
+
+class AssignmentOne(models.Model):
+    group_id = models.ForeignKey(Group, on_delete=models.CASCADE)
+    assignment_id = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+
+    key_2 = models.CharField(max_length=100, primary_key=True)
+
+
 class QuestionOne(models.Model):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
     qset_id = models.ForeignKey(Assignment, on_delete=models.CASCADE)
 
     key_3 = models.CharField(max_length=100, primary_key=True)
-    
-class Question(models.Model):
-    question_id = models.CharField(max_length=100, primary_key=True)
-    question = models.CharField(max_length=100, null = False)
 
-class Class(models.Model):
-    class_id = models.CharField(max_length=100, primary_key=True)
-    teacher_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    
-    professor_name = models.CharField(max_length=100, null = False)
-    class_name = models.CharField(max_length=100, null = False)
 
-class Eval_set(models.Model):
-    eval_set_id = models.OneToOneField(Grader)
-    student_name = models.CharField(max_length=100, null = False)
 
-class Grader(models.Model):
-    assignment_id = models.CharField(max_length=100, null = False)
-    eval_set_id = models.CharField(max_length=100, null = False)
-    grader_name = models.CharField(max_length=100, null = False)
-    key_5 = models.CharField(max_length=100, primary_key=True)
+
+
 
 class GraderOne(models.Model):
     grader_id = models.ForeignKey(User, on_delete=models.CASCADE)
     assignment_id = models.ForeignKey(Grader, on_delete=models.CASCADE)
     key_4 = models.CharField(max_length=100, primary_key=True)
-
-
-
-    
-
-
-
-
-
-    
-
