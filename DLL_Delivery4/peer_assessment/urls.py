@@ -1,7 +1,6 @@
 from django.urls import path
 
-from . import views, requestHandler, changepassword
-
+from . import views, requestHandler, changepassword, addassessment, allassessmentsprof
 from rest_framework import routers
 from .api import AssessmentViewSet
 
@@ -18,5 +17,7 @@ from .api import AssessmentViewSet
 # take the request and send it to the requestHandler server side
 urlpatterns = [
     path('validate/', requestHandler.validate_user),
-    path('verifychangepassword/', changepassword.change_password)
+    path('verifychangepassword/', changepassword.change_password),
+    path('addassessmentreq/', addassessment.add_assessment),
+    path('assessmentview/', allassessmentsprof.view_assessments)
 ]

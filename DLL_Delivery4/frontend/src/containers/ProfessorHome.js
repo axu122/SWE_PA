@@ -11,7 +11,7 @@ import Nav from '../components/NavBar'
 
 
 
-class StudentHome extends Component{
+class ProfessorHome extends Component{
 
     state={
         logout:false,
@@ -47,4 +47,4 @@ class StudentHome extends Component{
     }
 }
 
-export default StudentHome
+export default ProfessorHome
