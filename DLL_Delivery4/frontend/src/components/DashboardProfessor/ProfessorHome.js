@@ -16,7 +16,7 @@ import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 
 
 
-const StudentHome = props=>{
+const ProfessorHome = props=>{
 
 // 
     return(
@@ -110,4 +110,4 @@ const StudentHome = props=>{
     )
 }
 
-export default StudentHome
+export default ProfessorHome

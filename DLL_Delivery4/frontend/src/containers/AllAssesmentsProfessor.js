@@ -5,7 +5,7 @@ import Moment from 'moment'
 import Assesments from '../components/DashboardProfessor/AllAssesments'
 import ToDOModal from '../components/DashboardProfessor/ModalProfessor'
 import CreateModal from '../components/DashboardProfessor/CreateModal'
-
+import axios from 'axios'
 
 
 // Nav
@@ -16,7 +16,7 @@ import SnackBar from '../components/Login/SnackBar'
 // redirect
 import {Redirect} from 'react-router-dom'
 
-
+//List of assessments for prof to grade??
 const toGrade=[
     {
         name:'Pedro',
@@ -37,7 +37,7 @@ const toGrade=[
         assessment:'Delivery 5 Assessments'
     }
 ]
-
+//List of all assessments
 const allAssesments=[
     {
         name:'Delivery 1 Assessments',
@@ -101,6 +101,7 @@ class StudentHome extends Component{
       };
 
       openCreateModal = () => {
+       console.log("Open Modal for making assessment")
        this.setState({
         createModal:true,
 
@@ -117,6 +118,53 @@ class StudentHome extends Component{
 
     //  *------------Assesment Create Functions -------------*
     submitNewHandler=()=>{
+        //adds assessment to all assessments
+
+        //Http Request
+        console.log("Add Assessment")
+
+        //--------------------------------------------------------------------
+        //function to get the cookie from req in order to handle the csrf token
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        //get csrf token in order to not have request blocked
+        var csrftoken = getCookie('csrftoken');
+        //--------------------------------------------------------------------
+
+        console.log("Add assessment request")
+        //Using axios to write post request to Django server that is handled in requestHandler.py to validate
+        axios.post('/addassessmentreq/',{
+            name:this.state.assessmentName,
+            dueDate:this.state.assesmentDueDate,
+            overAll:'0',
+            email: localStorage.getItem('userEmail'),
+            usertype: localStorage.getItem('userType')
+        },
+        {
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        }).then((response) => {
+              var data = response.data
+              console.log(response.data);
+        }, (error) => {
+          console.log(error);
+        });
+
+
         allAssesments.push({
             name:this.state.assessmentName,
             dueDate:this.state.assesmentDueDate,
@@ -174,7 +222,50 @@ class StudentHome extends Component{
 
     render(){
 
-      
+      //write a get request to get all assessments!!!!!
+        //Http Request
+        console.log("Load assessments")
+
+        //--------------------------------------------------------------------
+        //function to get the cookie from req in order to handle the csrf token
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        //get csrf token in order to not have request blocked
+        var csrftoken = getCookie('csrftoken');
+        //--------------------------------------------------------------------
+
+        console.log("View assessments page")
+        //Using axios to write post request to Django server that is handled in requestHandler.py to validate
+        axios.get('/assessmentview/',{
+            email: localStorage.getItem('userEmail'),
+            type: localStorage.getItem('userType')
+        },
+        {
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        }).then((response) => {
+              var data = response.data
+              console.log("responded to get request");
+              console.log(response.data);
+        }, (error) => {
+          console.log(error);
+        });
+        //--------------------------------------------------------------------
+
         return(
             <Nav
                 user="Professor"
