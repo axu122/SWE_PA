@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions', #download this through pip install django-extensions, to run scripts
 ]
 
 MIDDLEWARE = [
