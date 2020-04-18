@@ -42,10 +42,39 @@ def add_assessment(request):
     dueDate = data.get("dueDate")
     email = data.get("email")
 
-    t = data.get("usertype")
+    t = data.get("type")
 
     print(assessmentName)
     print(dueDate)
+
+    b="F"
+    #Try to write to database to add assessment to list, dummy code in place
+    try:
+        # user = User.objects.get(email=email, password=currentPassword)
+        b="t"
+    except:
+        b = "F"
+    print(b)
+    print(data)
+    return Response(b, status=status.HTTP_200_OK)
+
+#Code ran when the professor does grades assessment
+#Also handles csrf token in order to allow the request to go through
+@requires_csrf_token
+@api_view(['POST'])
+def professor_grade(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    data = request.data
+    toDoIndex = data.get("toDoIndex")
+    todoSelected = data.get("todoSelected")
+    email = data.get("email")
+
+    t = data.get("type")
+
+    print(toDoIndex)
+    print(todoSelected)
 
     b="F"
     #Try to write to database to add assessment to list, dummy code in place

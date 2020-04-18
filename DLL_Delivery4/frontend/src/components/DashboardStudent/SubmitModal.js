@@ -49,7 +49,6 @@ const marks = [
   }
 
 export default function FormDialog(props) {
-    
   let teamMatesForm;
   if(props.info !==null && props.info.teamMates.length>0){
     teamMatesForm= props.info.teamMates.map(e=>(
@@ -99,7 +98,7 @@ export default function FormDialog(props) {
           <Button onClick={props.close} color="primary">
             Cancel
           </Button>
-          <Button onClick={props.submit} color="primary" disabled>
+          <Button onClick={props.submit} color="primary" disabled={props.disable}>
             Submit
           </Button>
         </DialogActions>

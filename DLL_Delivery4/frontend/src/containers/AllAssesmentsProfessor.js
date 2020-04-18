@@ -151,7 +151,7 @@ class StudentHome extends Component{
             dueDate:this.state.assesmentDueDate,
             overAll:'0',
             email: localStorage.getItem('userEmail'),
-            usertype: localStorage.getItem('userType')
+            type: localStorage.getItem('userType')
         },
         {
             headers: {
@@ -181,6 +181,50 @@ class StudentHome extends Component{
 
       //  *------------Submit ToDo Functions -------------*
       submitToDoHandler=()=>{
+        //Http Request
+        console.log("Submit Todo Modal")
+
+        //--------------------------------------------------------------------
+        //function to get the cookie from req in order to handle the csrf token
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        //get csrf token in order to not have request blocked
+        var csrftoken = getCookie('csrftoken');
+        //--------------------------------------------------------------------
+
+        console.log("To Grade Modal request")
+        console.log("this.state.toDoIndex: " + this.state.toDoIndex)
+        console.log("this.state.todoSelected: " + this.state.todoSelected)
+        //Using axios to write post request to Django server that is handled in requestHandler.py to validate
+        axios.post('/professorgrade/',{
+            toDoIndex:this.state.toDoIndex,
+            todoSelected:this.state.todoSelected,
+            email: localStorage.getItem('userEmail'),
+            type: localStorage.getItem('userType')
+        },
+        {
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        }).then((response) => {
+              var data = response.data
+              console.log(response.data);
+        }, (error) => {
+          console.log(error);
+        });
        toGrade.splice(this.state.toDoIndex,1)
 
 
