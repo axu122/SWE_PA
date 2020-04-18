@@ -7,7 +7,7 @@ def run():
 	tblname = usr._meta.db_table    	# This can be used to figure out db_table name
 	print(tblname)
 
-	for u in User.objects.raw("SELECT types FROM peer_assessment_user"):
+	for u in User.objects.raw("SELECT * FROM peer_assessment_user"):
 		print(u)
 
 	# for u in User.objects.all():
