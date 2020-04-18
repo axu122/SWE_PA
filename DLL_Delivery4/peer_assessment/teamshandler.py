@@ -6,10 +6,11 @@ from peer_assessment.models import *
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 
+
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
 @api_view(['GET'])
-def view_assessments(request):
+def view_teams(request):
     """
     List all code snippets, or create a new snippet.
     """
@@ -17,7 +18,7 @@ def view_assessments(request):
     email = data.get("email")
     t = data.get("type")
     print(data)
-
+    print("In student homepage servlet")
     b="F"
     #Try to write to database to add assessment to list, dummy code in place
     try:
@@ -32,19 +33,43 @@ def view_assessments(request):
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
 @api_view(['POST'])
-def add_assessment(request):
+def add_team(request):
     """
     List all code snippets, or create a new snippet.
     """
     data = request.data
-    assessmentName = data.get("name")
-    dueDate = data.get("dueDate")
+    name = data.get("name")
+    members = data.get("members")
+    overallGrade = data.get("overallGrade")
     email = data.get("email")
 
-    t = data.get("usertype")
+    t = data.get("type")
 
-    print(assessmentName)
-    print(dueDate)
+    b="F"
+    #Try to write to database to add assessment to list, dummy code in place
+    try:
+        # user = User.objects.get(email=email, password=currentPassword)
+        b="t"
+    except:
+        b = "F"
+    print(b)
+    print(data)
+    return Response(b, status=status.HTTP_200_OK)
+
+#Also handles csrf token in order to allow the request to go through
+@requires_csrf_token
+@api_view(['POST'])
+def add_student(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    data = request.data
+    name = data.get("name")
+    team = data.get("team")
+    overallGrade = data.get("overallGrade")
+    email = data.get("email")
+
+    t = data.get("type")
 
     b="F"
     #Try to write to database to add assessment to list, dummy code in place

@@ -249,7 +249,10 @@ class StudentHome extends Component{
 
         console.log("View assessments page")
         //Using axios to write post request to Django server that is handled in requestHandler.py to validate
-        axios.get('/assessmentview/',
+        axios.get('/assessmentview/',{
+            email: localStorage.getItem('userEmail'),
+            type: localStorage.getItem('userType')
+        },
         {
             headers: {
                 'X-CSRFToken': csrftoken

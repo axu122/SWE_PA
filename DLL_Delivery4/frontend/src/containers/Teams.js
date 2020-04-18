@@ -5,6 +5,7 @@ import Moment from 'moment'
 import Teams from '../components/DashboardProfessor/Teams'
 import ToDOModal from '../components/DashboardProfessor/ModalProfessor'
 import CreateModal from '../components/DashboardProfessor/CreateModal'
+import axios from 'axios'
 
 
 
@@ -75,7 +76,7 @@ const AllTeams=[
 
 
 
-class StudentHome extends Component{
+class ProfTeams extends Component{
 
     state={
         openToDoModal:false,
@@ -148,6 +149,49 @@ class StudentHome extends Component{
 
     //  *------------ Create Functions -------------*
     submitNewStudentHandler=()=>{
+ //--------------------------------------------------------------
+        console.log("create Student")
+        //function to get the cookie from req in order to handle the csrf token
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        //get csrf token in order to not have request blocked
+        var csrftoken = getCookie('csrftoken');
+    //--------------------------------------------------------------
+
+        console.log("create Student req")
+        axios.post('/makenewstudent/',{
+            name:this.state.studentName,
+            team:this.state.teamSelected,
+            overallGrade:'0',
+            email: localStorage.getItem('userEmail'),
+            type: localStorage.getItem('userType')
+        },
+        {
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        }).then((response) => {
+              var data = response.data
+              console.log(response.data);
+            }, (error) => {
+              console.log(error);
+        });
+    //--------------------------------------------------------------
+
         toGrade.push({
             name:this.state.studentName,
             team:this.state.teamSelected,
@@ -164,6 +208,51 @@ class StudentHome extends Component{
     }
 
     submitNewTeamHandler=()=>{
+
+    //--------------------------------------------------------------
+        console.log("create team")
+        //function to get the cookie from req in order to handle the csrf token
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        //get csrf token in order to not have request blocked
+        var csrftoken = getCookie('csrftoken');
+    //--------------------------------------------------------------
+
+        console.log("create team req")
+        axios.post('/makenewteam/',{
+            name:this.state.teamName,
+            members:[],
+            overallGrade:'0',
+            email: localStorage.getItem('userEmail'),
+            type: localStorage.getItem('userType')
+        },
+        {
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        }).then((response) => {
+              var data = response.data
+              console.log(response.data);
+            }, (error) => {
+              console.log(error);
+        });
+    //--------------------------------------------------------------
+
+    //Should probably remove this when done
         AllTeams.push({
             name:this.state.teamName,
             members:[],
@@ -216,7 +305,49 @@ class StudentHome extends Component{
 
 
     render(){
+      //write a get request to get all assessments!!!!!
+        //Http Request
+        console.log("Load Student Teans")
 
+        //--------------------------------------------------------------------
+        //function to get the cookie from req in order to handle the csrf token
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        //get csrf token in order to not have request blocked
+        var csrftoken = getCookie('csrftoken');
+        //--------------------------------------------------------------------
+
+        console.log("View Student Teams")
+        //Using axios to write post request to Django server that is handled in requestHandler.py to validate
+        axios.get('/studentteams/',{
+            email: localStorage.getItem('userEmail'),
+            type: localStorage.getItem('userType')
+        },
+        {
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        }).then((response) => {
+              var data = response.data
+              console.log("responded to get request");
+              console.log(response.data);
+        }, (error) => {
+          console.log(error);
+        });
+        //--------------------------------------------------------------------
       
         return(
             <Nav
@@ -277,4 +408,4 @@ class StudentHome extends Component{
     }
 }
 
-export default StudentHome
+export default ProfTeams
