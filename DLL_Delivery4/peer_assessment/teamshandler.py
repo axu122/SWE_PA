@@ -6,7 +6,7 @@ from peer_assessment.models import *
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 
-
+#handles displaying teams and students correctly
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
 @api_view(['GET'])
@@ -29,7 +29,7 @@ def view_teams(request):
     print(b)
     return Response(b, status=status.HTTP_200_OK)
 
-
+#handles add team button functionality
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
 @api_view(['POST'])
@@ -56,6 +56,7 @@ def add_team(request):
     print(data)
     return Response(b, status=status.HTTP_200_OK)
 
+#handles add student button functionality
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
 @api_view(['POST'])

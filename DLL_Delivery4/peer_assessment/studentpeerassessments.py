@@ -6,6 +6,7 @@ from peer_assessment.models import *
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 
+#handles displaying students peer assessments
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
 @api_view(['GET'])
@@ -28,6 +29,7 @@ def view_assessments(request):
     print(b)
     return Response(b, status=status.HTTP_200_OK)
 
+#handles displaying students completed assessments
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
 @api_view(['GET'])
