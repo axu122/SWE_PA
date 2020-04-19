@@ -41,7 +41,7 @@ class Question(models.Model):
     def __str__(self):
         return self.question
 
-    question_id = models.CharField(max_length=100, primary_key=True)
+    question_id = models.AutoField(primary_key=True)
     question = models.CharField(max_length=100, null=False)
 
 
@@ -49,7 +49,7 @@ class Class(models.Model):
     def __str__(self):
         return self.class_name
 
-    class_id = models.CharField(max_length=100, primary_key=True, default="")
+    class_id = models.AutoField(primary_key=True)
     professor_name = models.CharField(max_length=100, null=False)
     class_name = models.CharField(max_length=100, null=False)
     section = models.CharField(max_length=100, null=False)
@@ -61,7 +61,7 @@ class Class(models.Model):
 class Group(models.Model):
     def __str__(self):
         return self.group_name
-    group_id = models.CharField(max_length=100, primary_key=True)
+    group_id = models.AutoField(primary_key=True)
     num_students = models.CharField(max_length=100, unique=False, null=False)
     group_name = models.CharField(max_length=100, unique=True, null=False)
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE, default="")
@@ -75,22 +75,23 @@ class GroupOne(models.Model):
 
     eagle_id = models.ForeignKey(User, on_delete=models.CASCADE)
     group_id = models.ForeignKey(Group, on_delete=models.CASCADE)
-    key_1 = models.CharField(max_length=100, primary_key=True)
+    group_one_id = models.CharField(max_length=100, primary_key=True)
+    # group_one_id = models.AutoField(primary_key=True)
 
 
 class Assignment(models.Model):
     def __str__(self):
         return self.assignment_name
 
-    assignment_id = models.CharField(max_length=100, primary_key=100)
+    assignment_id = models.AutoField(primary_key=True)
 
     assignment_name = models.CharField(max_length=100)
     creation_date = models.DateField(auto_now=True)
     due_date = models.DateField()
-    completion = models.BooleanField()
-    qset_id = models.CharField(max_length=100, null=False)
+    completion = models.BooleanField(default=False)
+    # qset_id = models.CharField(max_length=100, null=False)
 
-    class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
+    # class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
 
 
 # class Eval_set(models.Model):
@@ -109,7 +110,7 @@ class Grader(models.Model):
     group_id = models.ForeignKey(Group, on_delete=models.CASCADE, default="")
 
     grader_name = models.CharField(max_length=100, null=False)
-    grader_ass_id = models.CharField(max_length=100, primary_key=True)
+    grader_ass_id = models.AutoField(primary_key=True)
     aggregate_score = models.CharField(max_length=100, null=False)
 
 
@@ -117,7 +118,7 @@ class AssignmentOne(models.Model):
     group_id = models.ForeignKey(Group, on_delete=models.CASCADE)
     assignment_id = models.ForeignKey(Assignment, on_delete=models.CASCADE)
 
-    key_2 = models.CharField(max_length=100, primary_key=True)
+    assignment_one_id = models.CharField(max_length=100, primary_key=True)
 
 
 class QuestionOne(models.Model):
@@ -125,7 +126,8 @@ class QuestionOne(models.Model):
     qset_id = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     grade = models.CharField(max_length=100, null=False, default="")
     comment = models.CharField(max_length=100, null=False, default="")
-    key_3 = models.CharField(max_length=100, primary_key=True)
+    question_one_id = models.CharField(max_length=100, primary_key=True)
+    # question_one_id = models.AutoField(primary_key=True)
 
 
 class GraderOne(models.Model):
@@ -140,4 +142,5 @@ class Instructors(models.Model):
 class InstructorSet(models.Model):
     instructor_list_id = models.ForeignKey(Class, on_delete=models.CASCADE)
     instructor_id = models.OneToOneField(Instructors, on_delete=models.CASCADE)
-    key_id = models.CharField(max_length=100, primary_key=True)
+    instructor_set_id = models.CharField(max_length=100, primary_key=True)
+    # instructor_set_id = models.AutoField(primary_key=True)

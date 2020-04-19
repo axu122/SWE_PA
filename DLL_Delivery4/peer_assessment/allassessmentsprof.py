@@ -3,8 +3,10 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from peer_assessment.models import *
+from peer_assessment.models import Assignment
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
+import datetime
 
 #Gets the right assessments to be displayed on Professor assessment page
 #Also handles csrf token in order to allow the request to go through
@@ -48,9 +50,15 @@ def add_assessment(request):
     print(dueDate)
 
     b="F"
+
     #Try to write to database to add assessment to list, dummy code in place
     try:
-        # user = User.objects.get(email=email, password=currentPassword)
+        assessment = Assignment.objects.create(assignment_name=assessmentName,
+                                               due_date=dueDate, completion=False)
+        print(assessment)
+        # assessment = Assignment.objects.create(assignment_name=assessmentName,
+        #                                        due_date=dueDate,
+        #                                        creation_date=datetime.date)
         b="t"
     except:
         b = "F"
