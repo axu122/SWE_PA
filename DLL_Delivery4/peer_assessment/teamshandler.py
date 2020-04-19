@@ -20,13 +20,37 @@ def view_teams(request):
     print(data)
     print("In student homepage servlet")
     b="F"
-    #Try to write to database to add assessment to list, dummy code in place
+    students = list()
+    teams = list()
     try:
-        # user = User.objects.get(email=email, password=currentPassword)
+        professor = User.objects.get(email=email)
+        #class = Class.objects.get(instructor_id = User.objects.get(email=email)
+        #groups (which is a list) = Group.objejcts.get(class_id = class.class_id)
+        #groupOnes = list()
+            #for each group a in groups
+                #groupOnes.append(Group_One.objects.get(group_id = a.group_id))
+        #students = list()
+        #for each groupOne b in groupOnes
+            #students.append(User.objects.get(student_id = b.student_id))
+
+        #These queries are to get all students from the class
+        #write another query for class id where instructor_id = professor.id
+        #write query on groups in the class based on matchinig class id
+            #this will have gotten us all groups/team in the class
+
+        # run through groupOne table to get all entries with groups from the class
+        #query through user table where you match eagle id from group1 table to userid from usertable
+
+
+        user = User.objects.get(email=email, password=currentPassword)
         b="t"
     except:
         b = "F"
     print(b)
+    #data = list()
+    #data.append(groups)
+    #data.append(students)
+    # return Response(data, status=status.HTTP_200_OK)
     return Response(b, status=status.HTTP_200_OK)
 
 #handles add team button functionality
@@ -48,7 +72,9 @@ def add_team(request):
     b="F"
     #Try to write to database to add assessment to list, dummy code in place
     try:
-        # user = User.objects.get(email=email, password=currentPassword)
+        # group = Group.objects.add(fill out stuff you need to add) Look up code for inserting into table
+        # group.save()
+
         b="t"
     except:
         b = "F"
