@@ -47,7 +47,7 @@ export const secondaryListItems = (
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
-      <ListItemText primary="All Assessments" />
+      <ListItemText primary="Class Assessments" />
     </ListItem>
 
     <ListItem button component={Link} to={'/professorHome/teams'}>
@@ -58,5 +58,18 @@ export const secondaryListItems = (
     </ListItem>
 
     
+  </div>
+);
+//Add onclick property to the button
+export const tertiaryListItems = (
+  <div>
+    <ListItem button component={Link} to={'/professorHome'}>
+      <ListItemIcon>
+        <DashboardIcon />
+      </ListItemIcon>
+      <ListItemText primary="Home" />
+    </ListItem>
+
+
   </div>
 );

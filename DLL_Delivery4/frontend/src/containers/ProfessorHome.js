@@ -11,13 +11,44 @@ import Nav from '../components/NavBar'
 
 
 
+//List of assessments for prof to grade??
+const classes=[
+    {
+        name:'Software Engineering',
+        teams:3
+    },
+    {
+        name:'Computer Science 1',
+        teams:4
+    },
+    {
+        name:'Computer Science 2',
+        teams:15
+    }
+]
 
 class ProfessorHome extends Component{
-
     state={
         logout:false,
-        changePassword:false
+        changePassword:false,
+        selectedClass:false,
+        selected:null,
+        selectedIndex:null,
+        class:null
     }
+
+    selectClassHandler = (e) => {
+        //add to local storage the class selected
+        localStorage.setItem('selectedClass', e.name)
+        this.setState({
+            selectedClass:true,
+            selected:classes[e],
+            selectedIndex:e
+
+        });
+      };
+
+
     changePassword=()=>{
         console.log('changepwd')
         this.setState({
@@ -75,13 +106,22 @@ class ProfessorHome extends Component{
           console.log(error);
         });
         //--------------------------------------------------------------------
-      
+//        if(localStorage.getItem('selectedClass')!=null){
+//            this.setState({
+//                user:false
+//            })
+//        }
         return(
             <Nav
+                user='ProfessorHome'
                 changePassword={this.changePassword}
                 onLogout={this.onLogout}
             >
-                <HomePage />
+                <HomePage
+                    classes={classes}
+                    selectClass={this.selectClassHandler}
+                />
+            {this.state.selectedClass===true?<Redirect to='/professorHome/assessments' />:null}
             {this.state.changePassword===true?<Redirect to='/changepassword' />:null}
             {this.state.logout===true?<Redirect to='/login' />:null}
 

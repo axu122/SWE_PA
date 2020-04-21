@@ -21,7 +21,8 @@ class ChangePassword extends Component{
         mismatchedNewCreds:false,
         successfulChange:false,
         professorRedirect:false,
-        studentRedirect:false
+        studentRedirect:false,
+        sidebar:null
     }
 
     onLogout=()=>{
@@ -143,6 +144,21 @@ class ChangePassword extends Component{
         })
       };
     render(){
+//         if(localStorage.getItem('userType')=='Student'){
+//             this.setState({
+//                 sidebar:'Student'
+//             })
+//         }
+//         else if(localStorage.getItem('selectedClass'==null)){
+//             this.setState({
+//                 sidebar:'ProfessorHome'
+//             })
+//         }
+//         else{
+//             this.setState({
+//                 sidebar:'Professor'
+//             })
+//         }
         let pageContent = (
             <ChangePasswordPage
                 textHandler={this.textHandler}
@@ -154,6 +170,7 @@ class ChangePassword extends Component{
         console.log('changepwdpage')
         return(
             <Nav
+//                 user={this.state.sidebar}
                 onLogout={this.onLogout}
             >
 
