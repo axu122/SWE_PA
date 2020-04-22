@@ -128,12 +128,12 @@ class Group_Assessment(models.Model):
 
 class Grade(models.Model):
     def __str__(self):
-        return self.grader, gradee
+        return self.grader, self.gradee
     # grader_ass_id = models.AutoField(primary_key=True)
     grader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='grader', null=False)
     gradee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='gradee', null=False)
     assessment_question = models.ForeignKey(Assessment_Question, on_delete=models.CASCADE, null=False)
-    score = models.CharField(max_length=100)
+    score = models.CharField(max_length=100, blank=True, null=True)
     # completion = models.BooleanField(default=False, null=False)
 
 # class Grader(models.Model):

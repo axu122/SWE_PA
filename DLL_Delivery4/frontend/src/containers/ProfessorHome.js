@@ -44,13 +44,17 @@ class ProfessorHome extends Component{
 
     selectClassHandler = (e) => {
         //add to local storage the class selected
-        localStorage.setItem('selectedClass', e.name)
+        console.log("selectedClass")
+        console.log(this.state.classes[e])
         this.setState({
             selectedClass:true,
-            selected:classes[e],
+            selected:this.state.classes[e],
             selectedIndex:e
 
         });
+        localStorage.setItem('selectedClass', this.state.classes[e].pk)
+//        localStorage.setItem('selectedClass', this.state.classes[e])
+        console.log(localStorage.getItem('selectedClass'))
       };
 
 
@@ -113,6 +117,7 @@ class ProfessorHome extends Component{
 //        return data
 
     }
+
     componentDidMount(){
         function getCookie(name) {
             var cookieValue = null;
