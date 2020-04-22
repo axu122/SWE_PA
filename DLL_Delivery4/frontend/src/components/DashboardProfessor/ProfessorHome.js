@@ -21,29 +21,31 @@ import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 const ProfessorHome = props=>{
 
     let classSelect;
+    console.log("classes")
+    console.log(props.classes)
     if(props.classes.length>0){
+        console.log("length>1")
         classSelect=props.classes.map((e,i)=>(
             <Grid item xs={12} md={6} sm={6} key={e.id}>
                 <Card>
                     <CardActions onClick={()=>props.selectClass(i)}>
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
-                        <Typography variant='h5'> <b>{e.name}</b> </Typography>
-                        <Typography variant='subtitle1'> <b>Teams: </b> {e.teams}</Typography>
+                        <Typography variant='h5'> <b>{e.fields.class_name}</b> </Typography>
+                        <Typography variant='subtitle1'> <b>Teams: </b> 5</Typography>
                         <Typography variant='subtitle2'> Click To See Class </Typography>
                     </CardContent>
                     </CardActions>
 
                 </Card>
             </Grid>
-
         ))
     }
     if(props.classes.length===0){
-        toDoArr=(
+        classSelect=(
             <Grid item xs={12} md={4} sm={6}>
 
 
-                <Typography variant='subtitle1' > No Assessments in the to grade!</Typography>
+                <Typography variant='subtitle1' > You Have No Classes!</Typography>
 
             </Grid>
 

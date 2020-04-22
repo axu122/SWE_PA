@@ -11,7 +11,7 @@ import datetime
 #Gets the right assessments to be displayed on Professor assessment page
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
-@api_view(['GET'])
+@api_view(['POST'])
 def view_assessments(request):
     """
     List all code snippets, or create a new snippet.

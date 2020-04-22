@@ -94,16 +94,20 @@ class Assessment(models.Model):
     creation_date = models.DateField(auto_now=True)
     start_date = models.DateField(null=False)
     due_date = models.DateField(null=False)
-    completion = models.BooleanField(default=False, null=False)
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE, null=False)
-
+    released = models.BooleanField(default=False, null=False)
 
 class Question(models.Model):
     def __str__(self):
         return self.question
 
+    TYPE = [
+        ('Multiple Choice', 'Multiple Choice'),
+        ('Open Response', 'Open Response')
+    ]
     # question_id = models.AutoField(primary_key=True)
     question = models.CharField(max_length=100, null=False)
+    type = models.CharField(max_length=100, choices=TYPE, null=False)
 
 
 class Assessment_Question(models.Model):
@@ -129,8 +133,8 @@ class Grade(models.Model):
     grader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='grader', null=False)
     gradee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='gradee', null=False)
     assessment_question = models.ForeignKey(Assessment_Question, on_delete=models.CASCADE, null=False)
-    score = models.CharField(max_length=100, null=False)
-
+    score = models.CharField(max_length=100)
+    # completion = models.BooleanField(default=False, null=False)
 
 # class Grader(models.Model):
 #

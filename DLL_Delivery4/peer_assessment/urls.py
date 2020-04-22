@@ -20,6 +20,7 @@ urlpatterns = [
     path('verifychangepassword/', changepassword.change_password),
     path('addassessmentreq/', allassessmentsprof.add_assessment),
     path('assessmentview/', allassessmentsprof.view_assessments),
+    # path('professorhomepage?<str:email>/<str:type>', homepages.view_professor_homepage),
     path('professorhomepage/', homepages.view_professor_homepage),
     path('studenthomepage/', homepages.view_student_homepage),
     path('studentteams/', teamshandler.view_teams),
