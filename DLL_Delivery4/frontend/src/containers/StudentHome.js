@@ -61,7 +61,7 @@ class StudentHome extends Component{
 
         console.log("View Student Homepage")
         //Using axios to write post request to Django server that is handled in requestHandler.py to validate
-        axios.get('/studenthomepage/',{
+        axios.post('/studenthomepage/',{
             email: localStorage.getItem('userEmail'),
             type: localStorage.getItem('userType')
         },

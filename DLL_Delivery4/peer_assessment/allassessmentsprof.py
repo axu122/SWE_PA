@@ -3,13 +3,15 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from peer_assessment.models import *
+from peer_assessment.models import Assessment
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
+import datetime
 
 #Gets the right assessments to be displayed on Professor assessment page
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
-@api_view(['GET'])
+@api_view(['POST'])
 def view_assessments(request):
     """
     List all code snippets, or create a new snippet.
@@ -18,7 +20,6 @@ def view_assessments(request):
     email = data.get("email")
     t = data.get("type")
     print(data)
-
     b="F"
     #Try to write to database to add assessment to list, dummy code in place
     try:
@@ -48,9 +49,14 @@ def add_assessment(request):
     print(dueDate)
 
     b="F"
+
     #Try to write to database to add assessment to list, dummy code in place
     try:
-        # user = User.objects.get(email=email, password=currentPassword)
+        # assessment = Assessment.objects.create(assessment_name=assessmentName, due_date=dueDate, start_date=datetime.date, completion=False)
+        # print(assessment)
+        # assessment = Assignment.objects.create(assignment_name=assessmentName,
+        #                                        due_date=dueDate,
+        #                                        creation_date=datetime.date)
         b="t"
     except:
         b = "F"
