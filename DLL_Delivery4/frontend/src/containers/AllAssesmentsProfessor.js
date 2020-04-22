@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import Moment from 'moment'
 
 // HomePage
-import Assesments from '../components/DashboardProfessor/AllAssesments'
+import Assessments from '../components/DashboardProfessor/AllAssesments'
 import ToDOModal from '../components/DashboardProfessor/ModalProfessor'
 import CreateModal from '../components/DashboardProfessor/CreateModal'
 import axios from 'axios'
@@ -38,7 +38,7 @@ const toGrade=[
     }
 ]
 //List of all assessments
-const allAssesments=[
+const allAssessments=[
     {
         name:'Delivery 1 Assessments',
         dueDate:  Moment(new Date()).subtract(30, 'days').calendar(),
@@ -74,9 +74,10 @@ class StudentHome extends Component{
         createModal:false,
         changePassword:false,
         assessmentName: null,
-        assesmentDueDate:null,
+        assessmentStartDate: null,
+        assessmentDueDate:null,
         notification:false,
-
+        allAssessments:[],
         toGrade:toGrade
 
     }
@@ -116,7 +117,7 @@ class StudentHome extends Component{
         })
     }
 
-    //  *------------Assesment Create Functions -------------*
+    //  *------------Assessment Create Functions -------------*
     submitNewHandler=()=>{
         //adds assessment to all assessments
 
@@ -148,10 +149,12 @@ class StudentHome extends Component{
         //Using axios to write post request to Django server that is handled in requestHandler.py to validate
         axios.post('/addassessmentreq/',{
             name:this.state.assessmentName,
-            dueDate:this.state.assesmentDueDate,
-            overAll:'0',
+            startDate: this.state.assessmentStartDate,
+            dueDate:this.state.assessmentDueDate,
             email: localStorage.getItem('userEmail'),
-            type: localStorage.getItem('userType')
+            type: localStorage.getItem('userType'),
+            selectedClass: localStorage.getItem('selectedClass')
+
         },
         {
             headers: {
@@ -165,15 +168,16 @@ class StudentHome extends Component{
         });
 
 
-        allAssesments.push({
+        allAssessments.push({
             name:this.state.assessmentName,
-            dueDate:this.state.assesmentDueDate,
+            dueDate:this.state.assessmentDueDate,
             overAll:'0'
         })
 
         this.setState({
             assessmentName:null,
-            assesmentDueDate:null,
+            assessmentStartDate:null,
+            assessmentDueDate:null,
             createModal:false,
             notification:true
         })
@@ -316,9 +320,9 @@ class StudentHome extends Component{
                 onLogout={this.onLogout}
                 changePassword={this.changePassword}
             >
-                <Assesments
+                <Assessments
                 toGrade={toGrade}
-                closedArr={allAssesments}
+                closedArr={allAssessments}
                 openModal={this.openModalHandler}
                 openCreate={this.openCreateModal}
                 />
@@ -335,14 +339,15 @@ class StudentHome extends Component{
                 open={this.state.createModal}
                 onChangeHandler={this.textHandler}
                 assessmentName={this.state.assessmentName}
-                assessmentDate={this.state.assesmentDueDate}
+                assessmentStartDate={this.state.assessmentStartDate}
+                assessmentDueDate={this.state.assessmentDueDate}
                 submit={this.submitNewHandler}
                 type='assessment'
 
             />
 
             <SnackBar 
-                    message='Assesment Created'
+                    message='Assessment Created'
                     open={this.state.notification}
                     handleClose={this.handleCloseNot}
                 
