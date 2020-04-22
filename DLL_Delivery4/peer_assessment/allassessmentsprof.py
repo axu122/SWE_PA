@@ -10,6 +10,7 @@ import json
 
 #Gets the right assessments to be displayed on Professor assessment page
 #Also handles csrf token in order to allow the request to go through
+#Work on next.
 @requires_csrf_token
 @api_view(['POST'])
 def view_assessments(request):
