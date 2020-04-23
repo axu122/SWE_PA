@@ -32,12 +32,12 @@ def view_teams(request):
         c = Class.objects.get(pk=selectedClass)
         g = Group.objects.filter(class_id = c)
         groups = serializers.serialize('json', g)
-
         gs = Group_Student.objects.filter(group_id__in = g).values_list("student_id", flat=True)
         s = User.objects.filter(pk__in = gs)
         students = serializers.serialize('json', s) #converts query set into json string. 
         
         print(groups)
+        print()
         print(students)
        
         b="success"
