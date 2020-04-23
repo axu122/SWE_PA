@@ -3,6 +3,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from peer_assessment.models import *
+from django.core import serializers
+
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 import datetime
@@ -10,17 +12,24 @@ import json
 
 #Gets the right assessments to be displayed on Professor assessment page
 #Also handles csrf token in order to allow the request to go through
-#Work on next.
+
+#Complete (?)
 @requires_csrf_token
 @api_view(['POST'])
 def view_assessments(request):
     """
     List all code snippets, or create a new snippet.
     """
+    print("CALLING VIEW ASSESSMENTS")
     data = request.data
     email = data.get("email")
     t = data.get("type")
-    print(data)
+    selectedClass = data.get("selectedClass")
+    c = Class.objects.get(pk=selectedClass)
+    a = Assessment.objects.filter(class_id = c)
+    assessments = serializers.serialize('json', a)
+    print(assessments)
+
     b="F"
     #Try to write to database to add assessment to list, dummy code in place
     try:
@@ -31,6 +40,7 @@ def view_assessments(request):
     print(b)
     return Response(b, status=status.HTTP_200_OK)
 
+
 #Code ran when the professor does add assessment
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
@@ -39,6 +49,7 @@ def add_assessment(request):
     """
     List all code snippets, or create a new snippet.
     """
+    print("ADD_ASSESSMENT SERVLET")
     data = request.data
     assessmentName = data.get("name")
     startDate = data.get("startDate")
