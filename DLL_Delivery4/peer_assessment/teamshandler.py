@@ -26,19 +26,48 @@ def view_teams(request):
     print("In student homepage servlet")
     b="Fail"
 
+    # students = list()
+    # teams = list()
+    studentsGrid = list()
+    teamsGrid = list()
     try:
-        students = list()
-        teams = list()
-        c = Class.objects.get(pk=selectedClass)
-        g = Group.objects.filter(class_id = c)
-        groups = serializers.serialize('json', g)
 
-        gs = Group_Student.objects.filter(group_id__in = g).values_list("student_id", flat=True)
-        s = User.objects.filter(pk__in = gs)
-        students = serializers.serialize('json', s) #converts query set into json string. 
-        
-        print(groups)
-        print(students)
+        c = Class.objects.get(pk=selectedClass)
+        g = Group.objects.filter(class_id=c)
+        # groups = serializers.serialize('json', g)
+
+        # gs = Group_Student.objects.filter(group_id__in=g).values_list("student_id", flat=True)
+        # s = User.objects.filter(pk__in=gs)
+        # students = serializers.serialize('json', s)  # converts query set into json string.
+        # print(groups)
+        # print(students)
+
+        for team in g:
+            print("made it in the loop")
+            gs = Group_Student.objects.filter(group_id=team).values_list("student_id", flat=True)
+            print("made it past query 1")
+            s = User.objects.filter(pk__in=gs).values_list('first_name', 'last_name')
+            stu = list()
+            # print(s)
+            t = team.group_name
+            for student in s:
+                name = student[0] + " " + student[1]
+                stu.append(name)
+                print("made to end of second loop")
+                studentsGrid.append(
+                    {
+                        "name": name,
+                        "team": t
+                    }
+                )
+            teamsGrid.append(
+                {
+                    "name": t,
+                    "members": stu
+                }
+            )
+        print(studentsGrid)
+        print(teamsGrid)
        
         b="success"
     except:
@@ -46,8 +75,8 @@ def view_teams(request):
 
     print(b)
 
-
-    return Response(b, status=status.HTTP_200_OK)
+    # return Response([groups, students], status=status.HTTP_200_OK)
+    return Response([studentsGrid, teamsGrid], status=status.HTTP_200_OK)
 
 #handles add team button functionality
 #Also handles csrf token in order to allow the request to go through

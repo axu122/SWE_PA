@@ -14,61 +14,61 @@ import SnackBar from "../components/Login/SnackBar";
 // redirect
 import { Redirect } from "react-router-dom";
 
-const toGrade = [
-  {
-    name: "Ted Cruz",
-    team: "Nickelodeon Political Super Packs",
-    overallGrade: 3.5,
-  },
-  {
-    name: "Bernie Sanders",
-    team: "Nickelodeon Political Super Packs",
-    overallGrade: 4.5,
-  },
-  {
-    name: "Drake Bell",
-    team: "Nickelodeon Political Super Packs",
-    overallGrade: 4.9,
-  },
-  {
-    name: "Mr.Clean",
-    team: "🥔🥔",
-    overallGrade: 3.5,
-  },
-  {
-    name: "Geico Lizzard",
-    team: "🥔🥔",
-    overallGrade: 4.0,
-  },
-  {
-    name: "Baby Yoda",
-    team: "🥔🥔",
-    overallGrade: 4.8,
-  },
-];
+//const toGrade = [
+//  {
+//    name: "Ted Cruz",
+//    team: "Nickelodeon Political Super Packs",
+//    overallGrade: 3.5,
+//  },
+//  {
+//    name: "Bernie Sanders",
+//    team: "Nickelodeon Political Super Packs",
+//    overallGrade: 4.5,
+//  },
+//  {
+//    name: "Drake Bell",
+//    team: "Nickelodeon Political Super Packs",
+//    overallGrade: 4.9,
+//  },
+//  {
+//    name: "Mr.Clean",
+//    team: "🥔🥔",
+//    overallGrade: 3.5,
+//  },
+//  {
+//    name: "Geico Lizzard",
+//    team: "🥔🥔",
+//    overallGrade: 4.0,
+//  },
+//  {
+//    name: "Baby Yoda",
+//    team: "🥔🥔",
+//    overallGrade: 4.8,
+//  },
+//];
 
-const AllTeams = [
-  {
-    name: "Nickelodeon Political Superpacks",
-    members: ["Ted Cruz", "Bernie Sanders", "Drake Bell"],
-    overAll: 4.3,
-  },
-  {
-    name: "🥔🥔",
-    members: ["Mr.Clean", "Baby Yoda", "Geico Lizzard"],
-    overAll: 4.2,
-  },
-  {
-    name: "Never forget...",
-    members: ["Peter Pan", "Invador Z", "Pinky and Brain"],
-    overAll: 3.3,
-  },
-  {
-    name: "Okuuurrr",
-    members: ["Queen B", "Niki Minaj", "Cardi B"],
-    overAll: 2.7,
-  },
-];
+//const AllTeams = [
+//  {
+//    name: "Nickelodeon Political Superpacks",
+//    members: ["Ted Cruz", "Bernie Sanders", "Drake Bell"],
+//    overAll: 4.3,
+//  },
+//  {
+//    name: "🥔🥔",
+//    members: ["Mr.Clean", "Baby Yoda", "Geico Lizzard"],
+//    overAll: 4.2,
+//  },
+//  {
+//    name: "Never forget...",
+//    members: ["Peter Pan", "Invador Z", "Pinky and Brain"],
+//    overAll: 3.3,
+//  },
+//  {
+//    name: "Okuuurrr",
+//    members: ["Queen B", "Niki Minaj", "Cardi B"],
+//    overAll: 2.7,
+//  },
+//];
 
 class ProfTeams extends Component {
   state = {
@@ -87,15 +87,16 @@ class ProfTeams extends Component {
     notificationTeam: false,
     createModalTeam: false,
 
-    allStudent: toGrade,
+    allStudents: [],
+    allTeams: []
   };
 
   // *----------HANDLE MODAL METHODS------------------*
   openModalHandler = (e) => {
-    console.log(toGrade[e]);
+    console.log(this.state.allStudents[e]);
     this.setState({
       openToDoModal: true,
-      todoSelected: toGrade[e],
+      todoSelected: this.state.allStudents[e],
     });
   };
 
@@ -186,14 +187,14 @@ class ProfTeams extends Component {
       );
     //--------------------------------------------------------------
 
-    toGrade.push({
+    this.state.allStudents.push({
       name: this.state.studentName,
       team: this.state.teamSelected,
       overallGrade: "0",
     });
 
     this.setState({
-      allStudent: toGrade,
+      allStudents: this.state.allStudents,
       studentName: null,
       teamSelected: null,
       createModal: false,
@@ -254,7 +255,7 @@ class ProfTeams extends Component {
     //--------------------------------------------------------------
 
     //Should probably remove this when done
-    AllTeams.push({
+    this.state.allTeams.push({
       name: this.state.teamName,
       members: [],
       overallGrade: "0",
@@ -281,9 +282,9 @@ class ProfTeams extends Component {
 
   // *------ DELETE STUDENT ---------*
   studentDelete = (index) => {
-    toGrade.splice(index, 1);
+    this.state.allStudents.splice(index, 1);
     this.setState({
-      allStudent: toGrade,
+      allStudents: this.state.allStudents,
     });
   };
 
@@ -302,12 +303,8 @@ class ProfTeams extends Component {
     });
   };
 
-  render() {
-    //write a get request to get all assessments!!!!!
-    //Http Request
-    console.log("Load Student Teans");
-
-    //--------------------------------------------------------------------
+  componentDidMount(){
+        //--------------------------------------------------------------------
     //function to get the cookie from req in order to handle the csrf token
     function getCookie(name) {
       var cookieValue = null;
@@ -349,11 +346,31 @@ class ProfTeams extends Component {
           var data = response.data;
           console.log("responded to get request");
           console.log(response.data);
+//          var teams = JSON.parse(data[0])
+//          var students = JSON.parse(data[1])
+//          for (student in students){
+//               for (team in teams){
+//                   this.state.allTeams
+//               }
+//          }
+          this.setState({
+              allTeams: data[1],
+              allStudents: data[0]
+//              allTeams: JSON.parse(data[1]),
+//              allStudents: JSON.parse(data[0])
+          })
         },
         (error) => {
           console.log(error);
         }
       );
+  }
+  render() {
+    //write a get request to get all assessments!!!!!
+    //Http Request
+    console.log("Load Student Teans");
+
+
     //--------------------------------------------------------------------
 
     return (
@@ -363,8 +380,8 @@ class ProfTeams extends Component {
         onLogout={this.onLogout}
       >
         <Teams
-          toGrade={this.state.allStudent}
-          closedArr={AllTeams}
+          students={this.state.allStudents}
+          teams={this.state.allTeams}
           openCreateModalTeam={this.openCreateModalTeam}
           openCreate={this.openCreateModal}
           studentDelete={this.studentDelete}
@@ -379,7 +396,7 @@ class ProfTeams extends Component {
           teamSelected={this.state.teamSelected}
           submit={this.submitNewStudentHandler}
           type="student"
-          teams={AllTeams}
+          teams={this.state.allTeams}
           teamSelectHandler={this.teamSelectHandler}
         />
 
