@@ -17,18 +17,18 @@ import Typography from '@material-ui/core/Typography';
 const StudentHome = props=>{
 
 
-    let toDoArr;
-    let closedArr;
+    let studentGrid;
+    let teamsGrid;
 
-    if(props.toGrade.length>0){
-        toDoArr=props.toGrade.map((e,i)=>(
+    if(props.students.length>0){
+        studentGrid=props.students.map((e,i)=>(
             <Grid item xs={12} md={4} sm={6} key={e.id}>
                 <Card>
 
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
                         <Typography variant='h5' color='primary'> <b>{e.name}</b> </Typography>
-                        <Typography variant='subtitle1'> <b>Team:</b> {e.team}</Typography>
-                        <Typography variant='subtitle1'> <b>Overall Grade:</b> {e.overallGrade}/5 </Typography>
+                        <Typography variant='subtitle1'> <b>Team: </b>{e.team}</Typography>
+                        <Typography variant='subtitle1'> <b>Overall Grade:</b> 5/5 </Typography>
                         <Button outlined color="primary" onClick={()=>props.studentDelete(i)}> Delete </Button>
                     </CardContent>
                     
@@ -37,8 +37,25 @@ const StudentHome = props=>{
             
         ))
     }
-    if(props.toGrade.length===0){
-        toDoArr=props.toGrade.map(e=>(
+//    }f(props.students.length>0){
+//        studentGrid=props.students.map((e,i)=>(
+//            <Grid item xs={12} md={4} sm={6} key={e.id}>
+//                <Card>
+//
+//                    <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
+//                        <Typography variant='h5' color='primary'> <b>{e.fields.first_name} {e.fields.last_name}</b> </Typography>
+//                        <Typography variant='subtitle1'> <b>Team:</b> 1</Typography>
+//                        <Typography variant='subtitle1'> <b>Overall Grade:</b> 5/5 </Typography>
+//                        <Button outlined color="primary" onClick={()=>props.studentDelete(i)}> Delete </Button>
+//                    </CardContent>
+//
+//                </Card>
+//            </Grid>
+//
+//        ))
+//    }
+    if(props.students.length===0){
+        studentGrid=props.students.map(e=>(
             <Grid item xs={12} md={4} sm={6}>
                 
                 
@@ -49,25 +66,40 @@ const StudentHome = props=>{
         ))
     }
 
-    if(props.closedArr.length>0){
-        closedArr=props.closedArr.map((e,i)=>(
+//    if(propsps.teams.length>0){
+//        teamsGrid=props.teams.map((e,i)=>(
+//            <Grid item xs={12} md={6} sm={6} key={e.id}>
+//                <Card>
+//
+//                    <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
+//                        <Typography variant='h5' color='primary'> <b>{e.fields.group_name}</b> </Typography>
+//                        <Typography variant='subtitle2' > <b>Overall Grade: </b> 5/5 </Typography>
+//
+//                    </CardContent>
+//
+//                </Card>
+//            </Grid>
+//
+//        ))
+//    }
+    if(props.teams.length>0){
+        teamsGrid=props.teams.map((e,i)=>(
             <Grid item xs={12} md={6} sm={6} key={e.id}>
                 <Card>
 
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
                         <Typography variant='h5' color='primary'> <b>{e.name}</b> </Typography>
-                        <Typography variant='subtitle1' > <b>Members:</b> {e.members.map(name=><Typography variant='caption'>{name} | </Typography>)} </Typography>
-                        <Typography variant='subtitle2' > <b>Overall Grade: </b> {e.overAll}/5 </Typography>
+                        <Typography variant='subtitle1' > <b>Members:</b> {e.members.map(name=><Typography variant='caption'>{name} </Typography>)} </Typography>
 
                     </CardContent>
-                    
+
                 </Card>
             </Grid>
-            
+
         ))
     }
-    if(props.closedArr.length===0){
-        closedArr=props.closedArr.map(e=>(
+    if(props.teams.length===0){
+        teamsGrid=props.teams.map(e=>(
             <Grid item xs={12} md={4} sm={6}>
                 
                 <Typography variant='subtitle2'> No teams created yet</Typography>
@@ -97,7 +129,7 @@ const StudentHome = props=>{
 
             <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-between'}}>
                 
-                {closedArr}                
+                {teamsGrid}
 
 
             </Grid>
@@ -119,7 +151,7 @@ const StudentHome = props=>{
 
             <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-evenly'}}>
                 
-                {toDoArr}                
+                {studentGrid}
 
 
             </Grid>
