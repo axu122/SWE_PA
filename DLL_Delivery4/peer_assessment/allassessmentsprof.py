@@ -38,7 +38,7 @@ def view_assessments(request):
     except:
         b = "F"
     print(b)
-    return Response(b, status=status.HTTP_200_OK)
+    return Response(assessments, status=status.HTTP_200_OK)
 
 
 #Code ran when the professor does add assessment
@@ -86,7 +86,9 @@ def add_assessment(request):
                 for aq in assess_qs:
                     grade = Grade.objects.create(grader=grader, gradee=gradee, assessment_question=aq)
                     grade.save()
-    # print(assessment)
+    print(assessment)
+    assess = Assessment.objects.get(pk = assessment.id)
+    a = serializers.serialize('json', [assess, ])
     #Try to write to database to add assessment to list, dummy code in place
     try:
 
@@ -96,7 +98,7 @@ def add_assessment(request):
         b = "F"
     print(b)
     print(data)
-    return Response(b, status=status.HTTP_200_OK)
+    return Response(a, status=status.HTTP_200_OK)
 
 #Code ran when the professor does grades assessment
 #Also handles csrf token in order to allow the request to go through
