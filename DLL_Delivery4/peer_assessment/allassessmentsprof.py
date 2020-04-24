@@ -26,9 +26,19 @@ def view_assessments(request):
     t = data.get("type")
     selectedClass = data.get("selectedClass")
     c = Class.objects.get(pk=selectedClass)
-    a = Assessment.objects.filter(class_id = c)
-    assessments = serializers.serialize('json', a)
-    print(assessments)
+    a = Assessment.objects.filter(class_id = c,)
+    closed = list()
+    open = list()
+    for i in a:
+        if i.due_date > datetime.date.today():
+            open.append(i)
+        else:
+            closed.append(i)
+    openassessments = serializers.serialize('json', open)
+    closedassessments = serializers.serialize('json', closed)
+    print(openassessments)
+    print(closedassessments)
+    # print(assessments)
 
     b="F"
     #Try to write to database to add assessment to list, dummy code in place
@@ -38,7 +48,7 @@ def view_assessments(request):
     except:
         b = "F"
     print(b)
-    return Response(b, status=status.HTTP_200_OK)
+    return Response([openassessments,closedassessments], status=status.HTTP_200_OK)
 
 
 #Code ran when the professor does add assessment
@@ -86,7 +96,9 @@ def add_assessment(request):
                 for aq in assess_qs:
                     grade = Grade.objects.create(grader=grader, gradee=gradee, assessment_question=aq)
                     grade.save()
-    # print(assessment)
+    print(assessment)
+    assess = Assessment.objects.get(pk = assessment.id)
+    a = serializers.serialize('json', [assess, ])
     #Try to write to database to add assessment to list, dummy code in place
     try:
 
@@ -96,7 +108,7 @@ def add_assessment(request):
         b = "F"
     print(b)
     print(data)
-    return Response(b, status=status.HTTP_200_OK)
+    return Response(a, status=status.HTTP_200_OK)
 
 #Code ran when the professor does grades assessment
 #Also handles csrf token in order to allow the request to go through

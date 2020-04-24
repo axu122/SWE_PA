@@ -128,7 +128,8 @@ class Group_Assessment(models.Model):
 
 class Grade(models.Model):
     def __str__(self):
-        return self.grader, self.gradee
+        return 'grader: ' + self.grader.first_name + ' ' + self.grader.last_name \
+               + ', gradee: ' + self.gradee.first_name+ ' ' + self.gradee.last_name
     # grader_ass_id = models.AutoField(primary_key=True)
     grader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='grader', null=False)
     gradee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='gradee', null=False)

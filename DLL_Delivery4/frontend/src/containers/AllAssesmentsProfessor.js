@@ -15,49 +15,49 @@ import SnackBar from "../components/Login/SnackBar";
 import { Redirect } from "react-router-dom";
 
 //List of assessments for prof to grade??
-const toGrade = [
-  {
-    name: "Pedro",
-    team: 1,
-    overallGrade: 3.5,
-    assessment: "Delivery 5 Assessments",
-  },
-  {
-    name: "John",
-    team: 4,
-    overallGrade: 4.5,
-    assessment: "Delivery 5 Assessments",
-  },
-  {
-    name: "Adam",
-    team: 2,
-    overallGrade: 3.9,
-    assessment: "Delivery 5 Assessments",
-  },
-];
+//const toGrade = [
+//  {
+//    name: "Pedro",
+//    team: 1,
+//    overallGrade: 3.5,
+//    assessment: "Delivery 5 Assessments",
+//  },
+//  {
+//    name: "John",
+//    team: 4,
+//    overallGrade: 4.5,
+//    assessment: "Delivery 5 Assessments",
+//  },
+//  {
+//    name: "Adam",
+//    team: 2,
+//    overallGrade: 3.9,
+//    assessment: "Delivery 5 Assessments",
+//  },
+//];
 //List of all assessments
-const allAssessments = [
-  {
-    name: "Delivery 1 Assessments",
-    dueDate: Moment(new Date()).subtract(30, "days").calendar(),
-    overAll: 4.3,
-  },
-  {
-    name: "Delivery 2 Assessments",
-    dueDate: Moment(new Date()).subtract(20, "days").calendar(),
-    overAll: 4.2,
-  },
-  {
-    name: "Delivery 3 Assessments",
-    dueDate: Moment(new Date()).subtract(15, "days").calendar(),
-    overAll: 3.3,
-  },
-  {
-    name: "Delivery 4 Assessments",
-    dueDate: Moment(new Date()).subtract(12, "days").calendar(),
-    overAll: 2.7,
-  },
-];
+//const allAssessments = [
+//  {
+//    name: "Delivery 1 Assessments",
+//    dueDate: Moment(new Date()).subtract(30, "days").calendar(),
+//    overAll: 4.3,
+//  },
+//  {
+//    name: "Delivery 2 Assessments",
+//    dueDate: Moment(new Date()).subtract(20, "days").calendar(),
+//    overAll: 4.2,
+//  },
+//  {
+//    name: "Delivery 3 Assessments",
+//    dueDate: Moment(new Date()).subtract(15, "days").calendar(),
+//    overAll: 3.3,
+//  },
+//  {
+//    name: "Delivery 4 Assessments",
+//    dueDate: Moment(new Date()).subtract(12, "days").calendar(),
+//    overAll: 2.7,
+//  },
+//];
 
 class StudentHome extends Component {
   state = {
@@ -73,7 +73,8 @@ class StudentHome extends Component {
     assessmentDueDate: null,
     notification: false,
     allAssessments: [],
-    toGrade: toGrade,
+    closedAssessments:[],
+    ranRequest: false
   };
 
   // *----------HANDLE MODAL METHODS------------------*
@@ -157,17 +158,28 @@ class StudentHome extends Component {
         (response) => {
           var data = response.data;
           console.log(response.data);
+          var a = JSON.parse(data)
+//          console.log(a)
+//          console.log(a[0])
+          this.state.allAssessments.push(a[0]);
+          this.setState({
+//              allAssessments: JSON.parse(data),
+              ranRequest: true
+          })
+//          console.log(this.state.allAssessments)
         },
         (error) => {
           console.log(error);
         }
       );
 
-    allAssessments.push({
-      name: this.state.assessmentName,
-      dueDate: this.state.assessmentDueDate,
-      overAll: "0",
-    });
+//    this.state.allAssessments.push({
+//      "fields": {
+//        "assessment_name": this.state.assessmentName,
+//        "start_date": this.state.assessmentStartDate,
+//        "due_date": this.state.assessmentDueDate,
+//      }
+//    });
 
     this.setState({
       assessmentName: null,
@@ -268,6 +280,9 @@ class StudentHome extends Component {
     });
   };
 
+
+
+
   render() {
     //write a get request to get all assessments!!!!!
     //Http Request
@@ -290,37 +305,45 @@ class StudentHome extends Component {
       }
       return cookieValue;
     }
-    //get csrf token in order to not have request blocked
-    var csrftoken = getCookie("csrftoken");
-    //--------------------------------------------------------------------
+    if(!this.state.ranRequest){
+        //get csrf token in order to not have request blocked
+        var csrftoken = getCookie("csrftoken");
+        //--------------------------------------------------------------------
 
-    console.log("View assessments page");
-    console.log(localStorage);
-    //Using axios to write post request to Django server that is handled in requestHandler.py to validate
-    axios
-      .post(
-        "/assessmentview/",
-        {
-          email: localStorage.getItem("userEmail"),
-          type: localStorage.getItem("userType"),
-          selectedClass: localStorage.getItem("selectedClass"),
-        },
-        {
-          headers: {
-            "X-CSRFToken": csrftoken,
-          },
-        }
-      )
-      .then(
-        (response) => {
-          var data = response.data;
-          console.log("responded to get request");
-          console.log(response.data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+        console.log("View assessments page");
+        console.log(localStorage);
+        //Using axios to write post request to Django server that is handled in requestHandler.py to validate
+        axios
+          .post(
+            "/assessmentview/",
+            {
+              email: localStorage.getItem("userEmail"),
+              type: localStorage.getItem("userType"),
+              selectedClass: localStorage.getItem("selectedClass"),
+            },
+            {
+              headers: {
+                "X-CSRFToken": csrftoken,
+              },
+            }
+          )
+          .then(
+            (response) => {
+              var data = response.data;
+              console.log("responded to get request");
+              console.log(response.data);
+              this.setState({
+                  allAssessments: JSON.parse(data[0]),
+                  closedAssessments: JSON.parse(data[1]),
+                  ranRequest: true
+              })
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+    }
+
     //--------------------------------------------------------------------
 
     return (
@@ -330,8 +353,8 @@ class StudentHome extends Component {
         changePassword={this.changePassword}
       >
         <Assessments
-          toGrade={toGrade}
-          closedArr={allAssessments}
+          closedAssessments={this.state.closedAssessments}
+          assessments={this.state.allAssessments}
           openModal={this.openModalHandler}
           openCreate={this.openCreateModal}
         />

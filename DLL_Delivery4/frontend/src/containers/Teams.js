@@ -14,62 +14,6 @@ import SnackBar from "../components/Login/SnackBar";
 // redirect
 import { Redirect } from "react-router-dom";
 
-//const toGrade = [
-//  {
-//    name: "Ted Cruz",
-//    team: "Nickelodeon Political Super Packs",
-//    overallGrade: 3.5,
-//  },
-//  {
-//    name: "Bernie Sanders",
-//    team: "Nickelodeon Political Super Packs",
-//    overallGrade: 4.5,
-//  },
-//  {
-//    name: "Drake Bell",
-//    team: "Nickelodeon Political Super Packs",
-//    overallGrade: 4.9,
-//  },
-//  {
-//    name: "Mr.Clean",
-//    team: "🥔🥔",
-//    overallGrade: 3.5,
-//  },
-//  {
-//    name: "Geico Lizzard",
-//    team: "🥔🥔",
-//    overallGrade: 4.0,
-//  },
-//  {
-//    name: "Baby Yoda",
-//    team: "🥔🥔",
-//    overallGrade: 4.8,
-//  },
-//];
-
-//const AllTeams = [
-//  {
-//    name: "Nickelodeon Political Superpacks",
-//    members: ["Ted Cruz", "Bernie Sanders", "Drake Bell"],
-//    overAll: 4.3,
-//  },
-//  {
-//    name: "🥔🥔",
-//    members: ["Mr.Clean", "Baby Yoda", "Geico Lizzard"],
-//    overAll: 4.2,
-//  },
-//  {
-//    name: "Never forget...",
-//    members: ["Peter Pan", "Invador Z", "Pinky and Brain"],
-//    overAll: 3.3,
-//  },
-//  {
-//    name: "Okuuurrr",
-//    members: ["Queen B", "Niki Minaj", "Cardi B"],
-//    overAll: 2.7,
-//  },
-//];
-
 class ProfTeams extends Component {
   state = {
     openToDoModal: false,

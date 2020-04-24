@@ -18,20 +18,50 @@ import Moment from 'moment'
 const StudentHome = props=>{
 
 
-    let toDoArr;
-    let closedArr;
+    let closedAssessments;
+    let assessmentsGrid;
 
-    if(props.toGrade.length>0){
-        toDoArr=props.toGrade.map((e,i)=>(
+    if(props.assessments.length>0){
+        assessmentsGrid=props.assessments.map((e,i)=>(
+            <Grid item xs={12} md={6} sm={6} key={e.id}>
+                <Card>
+
+                    <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
+                        <Typography variant='h5'> <b>{e.fields.assessment_name}</b> </Typography>
+                        <Typography variant='subtitle1' > <b>Start date:</b> {Moment(e.fields.start_date).format('MMMM Do YYYY')}</Typography>
+                        <Typography variant='subtitle1' > <b>Due date:</b> {Moment(e.fields.due_date).format('MMMM Do YYYY')}</Typography>
+                        <Typography variant='subtitle2' > <b>Class Overall: </b> 5/5 </Typography>
+
+                    </CardContent>
+
+                </Card>
+            </Grid>
+
+        ))
+    }
+    if(props.assessments.length===0){
+        assessmentsGrid=props.assessments.map(e=>(
+            <Grid item xs={12} md={4} sm={6}>
+
+                <Typography variant='subtitle2'> No Assessments</Typography>
+
+            </Grid>
+
+        ))
+    }
+
+
+    if(props.closedAssessments.length>0){
+        closedAssessments=props.closedAssessments.map((e,i)=>(
             <Grid item xs={12} md={6} sm={6} key={e.id}>
                 <Card>
                     <CardActions onClick={()=>props.openModal(i)}>
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
-                        <Typography variant='h5'> <b>{e.name}</b> </Typography>
-                        <Typography variant='subtitle1'> <b>Team:</b> {e.team}</Typography>
-                        <Typography variant='subtitle1'> <b>Assessment:</b> {e.assessment} </Typography>
-                        <Typography variant='subtitle1'> <b>Overall Grade:</b> {e.overallGrade}/5 </Typography>
-                        <Typography variant='subtitle2'> Click to Grade </Typography>
+                        <Typography align='left' variant='h5'> <b>{e.fields.assessment_name}</b> <Typography align='left' variant='subtitle2' style={{color:'#FF5B5C'}}>(closed)</Typography> </Typography>
+                        <Typography variant='subtitle1' > <b>Start date:</b> {Moment(e.fields.start_date).format('MMMM Do YYYY')}</Typography>
+                        <Typography variant='subtitle1' > <b>Due date:</b> {Moment(e.fields.due_date).format('MMMM Do YYYY')}</Typography>
+                        <Typography variant='subtitle2' > <b>Class Overall: </b> 5/5 </Typography>
+                       <Typography variant='subtitle2'> Click to View Results </Typography>
                     </CardContent>
                     </CardActions>
                     
@@ -40,8 +70,27 @@ const StudentHome = props=>{
             
         ))
     }
-    if(props.toGrade.length===0){
-        toDoArr=(
+//    }if(props.closedAssessments.length>0){
+//        closedAssessments=props.closedAssessments.map((e,i)=>(
+//            <Grid item xs={12} md={6} sm={6} key={e.id}>
+//                <Card>
+//                    <CardActions onClick={()=>props.openModal(i)}>
+//                    <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
+//                        <Typography variant='h5'> <b>{e.fields.assessment_name}</b> </Typography>
+//                        <Typography variant='subtitle1'> <b>Team:</b> {e.team}</Typography>
+//                        <Typography variant='subtitle1'> <b>Assessment:</b> {e.assessment} </Typography>
+//                        <Typography variant='subtitle1'> <b>Overall Grade:</b> {e.overallGrade}/5 </Typography>
+//                        <Typography variant='subtitle2'> Click to Grade </Typography>
+//                    </CardContent>
+//                    </CardActions>
+//
+//                </Card>
+//            </Grid>
+//
+//        ))
+//    }
+    if(props.closedAssessments.length===0){
+        closedAssessments=(
             <Grid item xs={12} md={4} sm={6}>
                 
                 
@@ -52,33 +101,7 @@ const StudentHome = props=>{
         )
     }
 
-    if(props.closedArr.length>0){
-        closedArr=props.closedArr.map((e,i)=>(
-            <Grid item xs={12} md={6} sm={6} key={e.id}>
-                <Card>
 
-                    <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
-                        <Typography variant='h5'> <b>{e.name}</b> </Typography>
-                        <Typography variant='subtitle1' > <b>Due date:</b> {Moment(e.dueDate).format('MMMM Do YYYY')}</Typography>
-                        <Typography variant='subtitle2' > <b>Class Overall: </b> {e.overAll}/5 </Typography>
-
-                    </CardContent>
-                    
-                </Card>
-            </Grid>
-            
-        ))
-    }
-    if(props.closedArr.length===0){
-        closedArr=props.closedArr.map(e=>(
-            <Grid item xs={12} md={4} sm={6}>
-                
-                <Typography variant='subtitle2'> No Assessments</Typography>
-                
-            </Grid>
-            
-        ))
-    }
 
 
     return(
@@ -87,14 +110,19 @@ const StudentHome = props=>{
             <Grid item container sm={10} xs={10}>
                 <Grid item sm={12}>
                     <Typography variant="h4" color='primary'>
-                        To Grade
+                        All Assessments
                     </Typography>
                 </Grid>
             </Grid>
+            <Grid item sm={1}>
 
+                <Button variant='outlined' color='primary' onClick={props.openCreate}>
+                    Create Assessment
+                </Button>
+            </Grid>
             <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-between'}}>
                 
-                {toDoArr}                
+                {assessmentsGrid}
 
 
             </Grid>
@@ -102,20 +130,14 @@ const StudentHome = props=>{
             <Grid item container sm={10} xs={10}>
                 <Grid item sm={11}>
                     <Typography variant="h4" color='primary'>
-                       All Assessments
+                       Closed Assessments
                     </Typography>
-                </Grid>
-                <Grid item sm={1}>
-
-                    <Button variant='outlined' color='primary' onClick={props.openCreate}>
-                        Create Assessment
-                    </Button>
                 </Grid>
             </Grid>
 
             <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-between'}}>
                 
-                {closedArr}                
+                {closedAssessments}
 
 
             </Grid>
