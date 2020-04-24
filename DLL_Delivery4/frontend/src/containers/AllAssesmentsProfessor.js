@@ -15,7 +15,7 @@ import SnackBar from "../components/Login/SnackBar";
 import { Redirect } from "react-router-dom";
 
 //List of assessments for prof to grade??
-const toGrade = [
+//const toGrade = [
 //  {
 //    name: "Pedro",
 //    team: 1,
@@ -34,7 +34,7 @@ const toGrade = [
 //    overallGrade: 3.9,
 //    assessment: "Delivery 5 Assessments",
 //  },
-];
+//];
 //List of all assessments
 //const allAssessments = [
 //  {
@@ -73,7 +73,7 @@ class StudentHome extends Component {
     assessmentDueDate: null,
     notification: false,
     allAssessments: [],
-    toGrade: toGrade,
+    closedAssessments:[],
     ranRequest: false
   };
 
@@ -333,7 +333,8 @@ class StudentHome extends Component {
               console.log("responded to get request");
               console.log(response.data);
               this.setState({
-                  allAssessments: JSON.parse(data),
+                  allAssessments: JSON.parse(data[0]),
+                  closedAssessments: JSON.parse(data[1]),
                   ranRequest: true
               })
             },
@@ -352,7 +353,7 @@ class StudentHome extends Component {
         changePassword={this.changePassword}
       >
         <Assessments
-          toGrade={toGrade}
+          closedAssessments={this.state.closedAssessments}
           assessments={this.state.allAssessments}
           openModal={this.openModalHandler}
           openCreate={this.openCreateModal}
