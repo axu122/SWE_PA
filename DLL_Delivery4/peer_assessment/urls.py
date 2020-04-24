@@ -28,6 +28,6 @@ urlpatterns = [
     path('studentcompletedassessments/', studentpeerassessments.view_completed_assessments),
     path('makenewteam/', teamshandler.add_team),
     path('makenewstudent/', teamshandler.add_student),
-    path('professorgrade/', allassessmentsprof.professor_grade),
+    path('professordeadlineupdate/', allassessmentsprof.deadline_update),
     path('studentgrade/', studentpeerassessments.student_grade)
 ]

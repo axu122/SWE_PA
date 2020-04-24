@@ -81,7 +81,7 @@ class StudentHome extends Component {
   openModalHandler = (e) => {
     this.setState({
       openToDoModal: true,
-      todoSelected: toGrade[e],
+      todoSelected: this.state.allAssessments[e],
       toDoIndex: e,
     });
   };
@@ -194,7 +194,8 @@ class StudentHome extends Component {
   submitToDoHandler = () => {
     //Http Request
     console.log("Submit Todo Modal");
-
+    console.log(this.state.assessmentDueDate)
+    console.log(this.state.todoSelected)
     //--------------------------------------------------------------------
     //function to get the cookie from req in order to handle the csrf token
     function getCookie(name) {
@@ -222,11 +223,13 @@ class StudentHome extends Component {
     //Using axios to write post request to Django server that is handled in requestHandler.py to validate
     axios
       .post(
-        "/professorgrade/",
+        "/professordeadlineupdate/",
         {
           toDoIndex: this.state.toDoIndex,
-          todoSelected: this.state.todoSelected,
+//          todoSelected: this.state.todoSelected,
+          pk: this.state.todoSelected.pk,
           email: localStorage.getItem("userEmail"),
+          dueDate: this.state.assessmentDueDate,
           type: localStorage.getItem("userType"),
         },
         {
@@ -239,18 +242,22 @@ class StudentHome extends Component {
         (response) => {
           var data = response.data;
           console.log(response.data);
+          var a = JSON.parse(data)
+          this.state.allAssessments[this.state.toDoIndex]=a[0];
+          console.log(this.state.allAssessments);
         },
         (error) => {
           console.log(error);
         }
       );
-    toGrade.splice(this.state.toDoIndex, 1);
+//    this.state.closedAssessments.splice(this.state.toDoIndex, 1);
 
     this.setState({
       openToDoModal: false,
       createModal: false,
       toDoIndex: null,
       todoSelected: null,
+      ranRequest: false
     });
   };
 
@@ -363,7 +370,10 @@ class StudentHome extends Component {
           close={this.handleClose}
           open={this.state.openToDoModal}
           info={this.state.todoSelected}
+          assessmentDueDate={this.state.assessmentDueDate}
+          onChangeHandler={this.textHandler}
           submit={this.submitToDoHandler}
+          type = "assessmentUpdate"
         />
 
         <CreateModal
