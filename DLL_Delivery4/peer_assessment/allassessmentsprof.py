@@ -114,21 +114,25 @@ def add_assessment(request):
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
 @api_view(['POST'])
-def professor_grade(request):
+def deadline_update(request):
     """
     List all code snippets, or create a new snippet.
     """
     data = request.data
-    toDoIndex = data.get("toDoIndex")
-    todoSelected = data.get("todoSelected")
+    # toDoIndex = data.get("toDoIndex")
+    # todoSelected = data.get("todoSelected")
+    pk = data.get("pk")
     email = data.get("email")
-
+    dueDate = data.get("dueDate")
     t = data.get("type")
-
-    print(toDoIndex)
-    print(todoSelected)
-
+    # print(toDoIndex)
+    # print(todoSelected)
+    assessment = Assessment.objects.get(pk=int(pk))
+    assessment.due_date = dueDate
+    assessment.save()
     b="F"
+    assess = Assessment.objects.get(pk=assessment.id)
+    a = serializers.serialize('json', [assess, ])
     #Try to write to database to add assessment to list, dummy code in place
     try:
         # user = User.objects.get(email=email, password=currentPassword)
@@ -137,4 +141,4 @@ def professor_grade(request):
         b = "F"
     print(b)
     print(data)
-    return Response(b, status=status.HTTP_200_OK)
+    return Response(a, status=status.HTTP_200_OK)

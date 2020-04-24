@@ -25,7 +25,7 @@ const StudentHome = props=>{
         assessmentsGrid=props.assessments.map((e,i)=>(
             <Grid item xs={12} md={6} sm={6} key={e.id}>
                 <Card>
-
+                    <CardActions onClick={()=>props.openModal(i)}>
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
                         <Typography variant='h5'> <b>{e.fields.assessment_name}</b> </Typography>
                         <Typography variant='subtitle1' > <b>Start date:</b> {Moment(e.fields.start_date).format('MMMM Do YYYY')}</Typography>
@@ -33,6 +33,7 @@ const StudentHome = props=>{
                         <Typography variant='subtitle2' > <b>Class Overall: </b> 5/5 </Typography>
 
                     </CardContent>
+                    </CardActions>
 
                 </Card>
             </Grid>
@@ -55,7 +56,6 @@ const StudentHome = props=>{
         closedAssessments=props.closedAssessments.map((e,i)=>(
             <Grid item xs={12} md={6} sm={6} key={e.id}>
                 <Card>
-                    <CardActions onClick={()=>props.openModal(i)}>
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
                         <Typography align='left' variant='h5'> <b>{e.fields.assessment_name}</b> <Typography align='left' variant='subtitle2' style={{color:'#FF5B5C'}}>(closed)</Typography> </Typography>
                         <Typography variant='subtitle1' > <b>Start date:</b> {Moment(e.fields.start_date).format('MMMM Do YYYY')}</Typography>
@@ -63,8 +63,7 @@ const StudentHome = props=>{
                         <Typography variant='subtitle2' > <b>Class Overall: </b> 5/5 </Typography>
                        <Typography variant='subtitle2'> Click to View Results </Typography>
                     </CardContent>
-                    </CardActions>
-                    
+
                 </Card>
             </Grid>
             
