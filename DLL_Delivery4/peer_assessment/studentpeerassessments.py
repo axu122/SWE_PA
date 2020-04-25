@@ -3,21 +3,54 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from peer_assessment.models import *
+from django.core import serializers
+
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 
 #handles displaying students peer assessments
 #Also handles csrf token in order to allow the request to go through
 @requires_csrf_token
-@api_view(['GET'])
+@api_view(['POST'])
 def view_assessments(request):
     """
     List all code snippets, or create a new snippet.
     """
+    print("view_assessments-student")
     data = request.data
     email = data.get("email")
     t = data.get("type")
-    print(data)
+    # selectedClass = data.get("selectedClass")
+    selectedClass = 1
+
+
+
+    
+    student = User.objects.get(email=email)
+    grader = Grade.objects.filter(grader=student)
+    ids = list()
+    for i in grader:
+        ids.append(i.assessment_question.id)
+    assess_q = Assessment_Question.objects.filter(pk__in=ids)
+    
+    ids2 = list()
+    for i in assess_q:
+        ids2.append(i.assessment_id.id)
+    a = Assessment.objects.filter(pk__in=ids2)
+    assessments = serializers.serialize('json', a)
+    
+    print(a)
+
+    print("DDD")
+
+    c = Class.objects.get(pk=selectedClass)
+
+    assessment_for_specific_class = a.filter(class_id=c)
+    print(assessment_for_specific_class)
+
+    
+
+
 
     b="F"
     #Try to write to database to add assessment to list, dummy code in place
