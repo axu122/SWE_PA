@@ -10,5 +10,6 @@ urlpatterns = [
   path('professorHome/', views.index),
   path('professorHome/assessments/', views.index),
   path('professorHome/teams/', views.index),
+  path('professorHome/aggregatedresults/', views.index),
   path('changepassword/', views.index)
 ]

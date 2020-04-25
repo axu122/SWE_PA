@@ -14,53 +14,12 @@ import SnackBar from "../components/Login/SnackBar";
 // redirect
 import { Redirect } from "react-router-dom";
 
-//List of assessments for prof to grade??
-//const toGrade = [
-//  {
-//    name: "Pedro",
-//    team: 1,
-//    overallGrade: 3.5,
-//    assessment: "Delivery 5 Assessments",
-//  },
-//  {
-//    name: "John",
-//    team: 4,
-//    overallGrade: 4.5,
-//    assessment: "Delivery 5 Assessments",
-//  },
-//  {
-//    name: "Adam",
-//    team: 2,
-//    overallGrade: 3.9,
-//    assessment: "Delivery 5 Assessments",
-//  },
-//];
-//List of all assessments
-//const allAssessments = [
-//  {
-//    name: "Delivery 1 Assessments",
-//    dueDate: Moment(new Date()).subtract(30, "days").calendar(),
-//    overAll: 4.3,
-//  },
-//  {
-//    name: "Delivery 2 Assessments",
-//    dueDate: Moment(new Date()).subtract(20, "days").calendar(),
-//    overAll: 4.2,
-//  },
-//  {
-//    name: "Delivery 3 Assessments",
-//    dueDate: Moment(new Date()).subtract(15, "days").calendar(),
-//    overAll: 3.3,
-//  },
-//  {
-//    name: "Delivery 4 Assessments",
-//    dueDate: Moment(new Date()).subtract(12, "days").calendar(),
-//    overAll: 2.7,
-//  },
-//];
-
 class StudentHome extends Component {
   state = {
+    selectedAssessment: false,
+    selected: null,
+    selectedIndex: null,
+    //Modal Related for Update Deadline
     openToDoModal: false,
     todoSelected: null,
     toDoIndex: null,
@@ -68,14 +27,32 @@ class StudentHome extends Component {
     logout: false,
     createModal: false,
     changePassword: false,
+    notification: false,
+    //Assessment info
     assessmentName: null,
     assessmentStartDate: null,
     assessmentDueDate: null,
-    notification: false,
     allAssessments: [],
     closedAssessments:[],
+    //ran request in render
     ranRequest: false
   };
+
+
+  selectAssessmentHandler = (e) => {
+    //add to local storage the class selected
+    console.log("selectedClass");
+    console.log(this.state.closedAssessments[e]);
+    this.setState({
+      selectedAssessment: true,
+      selected: this.state.closedAssessments[e],
+      selectedIndex: e,
+    });
+    localStorage.setItem("selectedAssessment", this.state.allAssessments[e].pk);
+    //        localStorage.setItem('selectedClass', this.state.classes[e])
+    console.log(localStorage.getItem("selectedAssessment"));
+  };
+
 
   // *----------HANDLE MODAL METHODS------------------*
   openModalHandler = (e) => {
@@ -364,6 +341,7 @@ class StudentHome extends Component {
           assessments={this.state.allAssessments}
           openModal={this.openModalHandler}
           openCreate={this.openCreateModal}
+          selectAssessment={this.selectAssessmentHandler}
         />
 
         <ToDOModal
@@ -392,6 +370,9 @@ class StudentHome extends Component {
           open={this.state.notification}
           handleClose={this.handleCloseNot}
         />
+        {this.state.selectedAssessment === true ? (
+          <Redirect to="/professorHome/aggregatedresults" />
+        ) : null}
         {this.state.changePassword === true ? (
           <Redirect to="/changepassword" />
         ) : null}
