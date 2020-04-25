@@ -61,7 +61,29 @@ def view_student_homepage(request):
     b="F"
     # Commit
     #Try to write to database to add assessment to list, dummy code in place
-   
+    try:
+
+        student = User.objects.get(email=email)
+        g_s = Group_Student.objects.filter(student_id = student)
+    
+        ids = list()
+        for i in g_s:
+            ids.append(i.group_id.id)
+        
+        g = Group.objects.filter(pk__in=ids)
+        groups = serializers.serialize('json', Group.objects.filter(pk__in=ids))
+
+        ids2 = list()
+        for i in g:
+            ids2.append(i.class_id.id)
+        classes = serializers.serialize('json', Class.objects.filter(pk__in=ids2))
+
+        b="t"
+    except:
+        b = "F"
+    print(b)
+    print(classes)
+    return Response(b, status=status.HTTP_200_OK)
 
 
     
