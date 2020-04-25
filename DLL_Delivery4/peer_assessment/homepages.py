@@ -59,7 +59,7 @@ def view_student_homepage(request):
    
     
     b="F"
-    
+    # Commit
     #Try to write to database to add assessment to list, dummy code in place
     try:
 
