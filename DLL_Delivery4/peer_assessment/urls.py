@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, requestHandler, changepassword, allassessmentsprof, homepages, teamshandler, studentpeerassessments
+from . import views, requestHandler, changepassword, allassessmentsprof, profaggregatedresults, homepages, teamshandler, studentpeerassessments
 from rest_framework import routers
 from .api import AssessmentViewSet
 
@@ -29,5 +29,6 @@ urlpatterns = [
     path('makenewteam/', teamshandler.add_team),
     path('makenewstudent/', teamshandler.add_student),
     path('professordeadlineupdate/', allassessmentsprof.deadline_update),
-    path('studentgrade/', studentpeerassessments.student_grade)
+    path('studentgrade/', studentpeerassessments.student_grade),
+    path('resultsaggregated/', profaggregatedresults.view_aggregated_results)
 ]
