@@ -71,7 +71,7 @@ def view_student_homepage(request):
             ids.append(i.group_id.id)
         
         g = Group.objects.filter(pk__in=ids)
-        groups = serializers.serialize('json', Group.objects.filter(pk__in=ids))
+        groups = serializers.serialize('json', g)
 
         ids2 = list()
         for i in g:
@@ -83,7 +83,7 @@ def view_student_homepage(request):
         b = "F"
     print(b)
     print(classes)
-    return Response(b, status=status.HTTP_200_OK)
+    return Response(classes, status=status.HTTP_200_OK)
 
 
     

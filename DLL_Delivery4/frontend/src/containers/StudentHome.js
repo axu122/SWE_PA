@@ -16,8 +16,26 @@ class StudentHome extends Component{
 
     state={
         logout:false,
-        changePassword:false
+        changePassword:false,
+        selectedClass: false,
+        selected: null,
+        selectedIndex: null,
+        classes: [],
     }
+
+    selectClassHandler = (e) => {
+        //add to local storage the class selected
+        console.log("selectedClass");
+        console.log(this.state.classes[e]);
+        this.setState({
+          selectedClass: true,
+          selected: this.state.classes[e],
+          selectedIndex: e,
+        });
+        localStorage.setItem("studentSelectedClass", this.state.classes[e].pk);
+        //        localStorage.setItem('selectedClass', this.state.classes[e])
+        console.log(localStorage.getItem("studentSelectedClass"));
+    };
 
     changePassword=()=>{
         console.log('changepwd')
@@ -33,12 +51,7 @@ class StudentHome extends Component{
         })
     }
 
-    render(){
-      //write a get request to get all assessments!!!!!
-        //Http Request
-        console.log("Load Student Homepage")
-
-        //--------------------------------------------------------------------
+    componentDidMount() {
         //function to get the cookie from req in order to handle the csrf token
         function getCookie(name) {
             var cookieValue = null;
@@ -73,18 +86,37 @@ class StudentHome extends Component{
               var data = response.data
               console.log("responded to get request");
               console.log(response.data);
+              this.setState({
+                classes: JSON.parse(data),
+              });
         }, (error) => {
           console.log(error);
         });
+    }
+
+
+    render(){
+      //write a get request to get all assessments!!!!!
+        //Http Request
+        console.log("Load Student Homepage")
+
+        //--------------------------------------------------------------------
+
         //--------------------------------------------------------------------
       
         return(
             <Nav
-                user="Student"
+                user="StudentHome"
                 onLogout={this.onLogout}
                 changePassword={this.changePassword}
             >
-                <HomePage />
+                <HomePage
+                  classes={this.state.classes}
+                  selectClass={this.selectClassHandler}
+                />
+            {this.state.selectedClass === true ? (
+              <Redirect to="/studentHome/assessments" />
+            ) : null}
             {this.state.changePassword===true?<Redirect to='/changepassword' />:null}
             {this.state.logout===true?<Redirect to='/login' />:null}
 

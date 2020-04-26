@@ -89,7 +89,7 @@ const StudentHome = props=>{
 
             <Grid item sm={10} xs={10}>
                 <Typography variant="h4" color='primary'>
-                    To-Do 
+                    Current Assessments
                 </Typography>
             </Grid>
 
@@ -101,8 +101,8 @@ const StudentHome = props=>{
             </Grid>
 
             <Grid item sm={10} xs={10}>
-                <Typography variant="h4" style={{color:'#FF5B5C'}}>
-                    Missed
+                <Typography variant="h4" color='primary'>
+                    Past Assessments
                 </Typography>
             </Grid>
 

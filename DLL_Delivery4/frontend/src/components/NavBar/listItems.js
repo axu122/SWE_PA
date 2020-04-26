@@ -69,7 +69,17 @@ export const tertiaryListItems = (
       </ListItemIcon>
       <ListItemText primary="Home" />
     </ListItem>
+  </div>
+);
 
-
+//Add onclick property to the button
+export const fourthListItems = (
+  <div>
+    <ListItem button component={Link} to={'/studentHome'}>
+      <ListItemIcon>
+        <DashboardIcon />
+      </ListItemIcon>
+      <ListItemText primary="Home" />
+    </ListItem>
   </div>
 );
