@@ -41,6 +41,8 @@ class StudentHome extends Component {
   state = {
     logout: false,
     changePassword: false,
+    results: [],
+    ranRequest: false
   };
   changePassword = () => {
     console.log("changepwd");
@@ -77,35 +79,43 @@ class StudentHome extends Component {
       }
       return cookieValue;
     }
-    //get csrf token in order to not have request blocked
-    var csrftoken = getCookie("csrftoken");
-    //--------------------------------------------------------------------
+    if(!this.state.ranRequest){
+        //get csrf token in order to not have request blocked
+        var csrftoken = getCookie("csrftoken");
+        //--------------------------------------------------------------------
 
-    console.log("View Student Completed Assessments");
-    //Using axios to write post request to Django server that is handled in requestHandler.py to validate
-    axios
-      .post(
-        "/studentcompletedassessments/",
-        {
-          email: localStorage.getItem("userEmail"),
-          type: localStorage.getItem("userType"),
-        },
-        {
-          headers: {
-            "X-CSRFToken": csrftoken,
-          },
-        }
-      )
-      .then(
-        (response) => {
-          var data = response.data;
-          console.log("responded to get request");
-          console.log(response.data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+        console.log("View Student Completed Assessments");
+        //Using axios to write post request to Django server that is handled in requestHandler.py to validate
+        axios
+          .post(
+            "/studentcompletedassessments/",
+            {
+              email: localStorage.getItem("userEmail"),
+              type: localStorage.getItem("userType"),
+              studentSelectedClass: localStorage.getItem("studentSelectedClass")
+            },
+            {
+              headers: {
+                "X-CSRFToken": csrftoken,
+              },
+            }
+          )
+          .then(
+            (response) => {
+              var data = response.data;
+              console.log("responded to get request");
+              console.log(response.data);
+              this.setState({
+                  results: JSON.parse(data),
+    //              pastAssessments: JSON.parse(data[1]),
+                  ranRequest: true
+              })
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+    }
     //--------------------------------------------------------------------
 
     return (
@@ -114,7 +124,7 @@ class StudentHome extends Component {
         onLogout={this.onLogout}
         changePassword={this.changePassword}
       >
-        <Assesments completedArr={assesmentsCompleted} />
+        <Assesments completedArr={this.state.results} />
         {this.state.changePassword === true ? (
           <Redirect to="/changepassword" />
         ) : null}

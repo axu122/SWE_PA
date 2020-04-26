@@ -21,7 +21,7 @@ def view_assessments(request):
     email = data.get("email")
     t = data.get("type")
     # selectedClass = data.get("selectedClass")
-    selectedClass = 1
+    selectedClass = data.get("studentSelectedClass")
 
     b = "F"
     # Try to write to database to add assessment to list, dummy code in place
@@ -48,7 +48,7 @@ def view_assessments(request):
     except:
         b = "F"
     print(b)
-    return Response(b, status=status.HTTP_200_OK)
+    return Response(assess_for_class_json, status=status.HTTP_200_OK)
 
 # handles displaying students completed assessments
 # Also handles csrf token in order to allow the request to go through
@@ -64,7 +64,7 @@ def view_completed_assessments(request):
     email = data.get("email")
     t = data.get("type")
     print(data)
-    selectedClass = 1
+    selectedClass = data.get("studentSelectedClass")
 
     b = "F"
     # Try to write to database to add assessment to list, dummy code in place
@@ -93,7 +93,7 @@ def view_completed_assessments(request):
     except:
         b = "F"
     print(b)
-    return Response(b, status=status.HTTP_200_OK)
+    return Response(completed_assessments, status=status.HTTP_200_OK)
 
 # Code ran when the student does assessment
 # Also handles csrf token in order to allow the request to go through
