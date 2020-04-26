@@ -16,7 +16,7 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import { mainListItems, secondaryListItems, tertiaryListItems } from './listItems';
+import { mainListItems, secondaryListItems, tertiaryListItems, fourthListItems } from './listItems';
 import {Redirect} from 'react-router-dom'
 
 
@@ -163,7 +163,7 @@ export default function Dashboard(props) {
           </IconButton>
         </div>
         {/* <Divider /> */}
-        <List>{props.user==='Student'?mainListItems:props.user==='Professor'?secondaryListItems:tertiaryListItems}</List>
+        <List>{props.user==='Student'?mainListItems:props.user==='Professor'?secondaryListItems:props.user==='ProfessorHome'?tertiaryListItems:fourthListItems}</List>
         {/* <Divider /> */}
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>

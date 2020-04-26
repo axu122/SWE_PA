@@ -39,16 +39,20 @@ class StudentHome extends Component {
     logout: false,
     changePassword: false,
     disableSubmit: false,
-    assesmentsToDo: assesmentsToDo,
+    currAssessments: [],
+    pastAssessments:[],
+
+    ranRequest: false
+
   };
 
   // *----------HANDLE MODAL METHODS------------------*
   openModalHandler = (e) => {
-    console.log(assesmentsToDo[e]);
+    console.log(this.state.currAssessments[e]);
     console.log(e);
     this.setState({
       openToDoModal: true,
-      todoSelected: assesmentsToDo[e],
+      todoSelected: this.state.currAssessments[e],
       toDoIndex: e,
     });
   };
@@ -113,7 +117,7 @@ class StudentHome extends Component {
           console.log(error);
         }
       );
-    assesmentsToDo.splice(this.state.toDoIndex, 1);
+//    assesmentsToDo.splice(this.state.toDoIndex, 1);
 
     this.setState({
       openToDoModal: false,
@@ -159,35 +163,44 @@ class StudentHome extends Component {
       }
       return cookieValue;
     }
-    //get csrf token in order to not have request blocked
-    var csrftoken = getCookie("csrftoken");
-    //--------------------------------------------------------------------
+    if(!this.state.ranRequest){
 
-    console.log("View Student Peer Assessments");
-    //Using axios to write post request to Django server that is handled in requestHandler.py to validate
-    axios
-      .post(
-        "/studentpeerassessments/",
-        {
-          email: localStorage.getItem("userEmail"),
-          type: localStorage.getItem("userType"),
-        },
-        {
-          headers: {
-            "X-CSRFToken": csrftoken,
-          },
-        }
-      )
-      .then(
-        (response) => {
-          var data = response.data;
-          console.log("responded to get request");
-          console.log(response.data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+        //get csrf token in order to not have request blocked
+        var csrftoken = getCookie("csrftoken");
+        //--------------------------------------------------------------------
+
+        console.log("View Student Peer Assessments");
+        //Using axios to write post request to Django server that is handled in requestHandler.py to validate
+        axios
+          .post(
+            "/studentpeerassessments/",
+            {
+              email: localStorage.getItem("userEmail"),
+              type: localStorage.getItem("userType"),
+              studentSelectedClass: localStorage.getItem("studentSelectedClass")
+            },
+            {
+              headers: {
+                "X-CSRFToken": csrftoken,
+              },
+            }
+          )
+          .then(
+            (response) => {
+              var data = response.data;
+              console.log("responded to get request");
+              console.log(response.data);
+              this.setState({
+                  currAssessments: JSON.parse(data),
+    //              pastAssessments: JSON.parse(data[1]),
+                  ranRequest: true
+              })
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+    }
     //--------------------------------------------------------------------
 
     return (
@@ -197,8 +210,8 @@ class StudentHome extends Component {
         changePassword={this.changePassword}
       >
         <Assesments
-          toDoArr={assesmentsToDo}
-          closedArr={assesmentsClosed}
+          currAssessments={this.state.currAssessments}
+          pastAssessments={this.state.pastAssessments}
           openModal={this.openModalHandler}
         />
 
