@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from peer_assessment.models import *
 from django.core import serializers
-
+import datetime
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 
@@ -42,13 +42,23 @@ def view_assessments(request):
         c = Class.objects.get(pk=selectedClass)
 
         assess_for_class = a.filter(class_id=c)
-        assess_for_class_json = serializers.serialize('json', assess_for_class)
-        print(assess_for_class_json)
+
+        closed = list()
+        open = list()
+        for i in assess_for_class:
+            if i.due_date > datetime.date.today():
+                open.append(i)
+            else:
+                closed.append(i)
+        openassessments = serializers.serialize('json', open)
+        closedassessments = serializers.serialize('json', closed)
+
         b = "t"
     except:
         b = "F"
     print(b)
-    return Response(assess_for_class_json, status=status.HTTP_200_OK)
+    return Response([openassessments, closedassessments], status=status.HTTP_200_OK)
+
 
 # handles displaying students completed assessments
 # Also handles csrf token in order to allow the request to go through
