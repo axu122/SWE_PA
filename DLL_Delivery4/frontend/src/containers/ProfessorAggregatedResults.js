@@ -32,7 +32,8 @@ class ProfessorAggregatedResults extends Component {
     createModalTeam: false,
 
     allStudents: [],
-    allTeams: []
+    allTeams: [],
+    selected: localStorage.getItem("selectedAssessmentName")
   };
 
   selectDetailedHandler = (e) => {
@@ -335,6 +336,7 @@ class ProfessorAggregatedResults extends Component {
           openCreateModalTeam={this.openCreateModalTeam}
           openCreate={this.openCreateModal}
           studentDelete={this.remind}
+          selected={this.state.selected}
         />
 
         {/* Modal Student Create */}

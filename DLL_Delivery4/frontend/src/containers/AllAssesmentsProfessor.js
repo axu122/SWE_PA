@@ -49,6 +49,7 @@ class StudentHome extends Component {
       selectedIndex: e,
     });
     localStorage.setItem("selectedAssessment", this.state.allAssessments[e].pk);
+    localStorage.setItem("selectedAssessmentName", this.state.allAssessments[e].fields.assessment_name);
     //        localStorage.setItem('selectedClass', this.state.classes[e])
     console.log(localStorage.getItem("selectedAssessment"));
   };

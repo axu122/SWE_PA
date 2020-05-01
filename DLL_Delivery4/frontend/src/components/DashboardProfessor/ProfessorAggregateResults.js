@@ -21,7 +21,7 @@ import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 const ProfessorAggregateResults = props=>{
     let studentGrid;
     let teamsGrid;
-
+    let assessmentName;
     if(props.students.length>0){
         studentGrid=props.students.map((e,i)=>(
             <Grid item xs={12} md={4} sm={6} key={e.id}>
@@ -79,30 +79,46 @@ const ProfessorAggregateResults = props=>{
 
         ))
     }
-
+    if(props.selected!=null){
+        assessmentName=(
+            <Grid item sm={11}>
+                    <Typography variant="h4">
+                       Results for <b>{props.selected}</b>
+                    </Typography>
+            </Grid>
+        )
+    }
+    else {
+        assessmentName=(
+            <Grid item sm={11}>
+                    <Typography variant="h4">
+                       Results for Assessment
+                    </Typography>
+            </Grid>
+        )
+    }
 
     return(
         <Grid container spacing={6}>
 
             <Grid item container sm={10} xs={10}>
-                <Grid item sm={11}>
-                    <Typography variant="h4">
-                       All Teams
-                    </Typography>
-                </Grid>
-                <Grid item sm={1}>
-
+                {assessmentName}
+            </Grid>
+            <Grid item container sm={10} xs={10}>
                     <Button variant='outlined' color='primary' onClick={props.openCreateModalTeam}>
-                        New Team
+                        Release Results
                     </Button>
                     <Button variant='outlined' color='primary' onClick={props.openCreate}>
-                        New Student
+                        Download Results
                     </Button>
-                </Grid>
             </Grid>
 
             <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-between'}}>
-
+                <Grid item sm={11}>
+                    <Typography variant="h4">
+                       Teams
+                    </Typography>
+                </Grid>
                 {teamsGrid}
 
 

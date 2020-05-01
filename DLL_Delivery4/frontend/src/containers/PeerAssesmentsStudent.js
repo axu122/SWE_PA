@@ -191,8 +191,8 @@ class StudentHome extends Component {
               console.log("responded to get request");
               console.log(response.data);
               this.setState({
-                  currAssessments: JSON.parse(data),
-    //              pastAssessments: JSON.parse(data[1]),
+                  currAssessments: JSON.parse(data[0]),
+                  pastAssessments: JSON.parse(data[1]),
                   ranRequest: true
               })
             },

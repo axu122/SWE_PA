@@ -40,6 +40,11 @@ def view_assessments(request):
         assessments = serializers.serialize('json', a)
 
         c = Class.objects.get(pk=selectedClass)
+        # gs = Group_Student.objects.filer(student_id=student)
+
+        # group = Group.objects.filter(class_id = c)
+
+
 
         assess_for_class = a.filter(class_id=c)
 
