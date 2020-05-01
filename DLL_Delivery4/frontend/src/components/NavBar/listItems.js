@@ -6,6 +6,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import { Link} from 'react-router-dom';
 
 
@@ -55,6 +56,12 @@ export const secondaryListItems = (
         <PeopleIcon/>
       </ListItemIcon>
       <ListItemText primary="Teams & Students" />
+    </ListItem>
+    <ListItem button component={Link} to={'/professorHome/questions'}>
+      <ListItemIcon>
+        <LibraryBooksIcon/>
+      </ListItemIcon>
+      <ListItemText primary="Questions" />
     </ListItem>
 
     

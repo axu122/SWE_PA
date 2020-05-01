@@ -11,7 +11,8 @@ import {
     AllAssesmentProfessor,
     Teams,
     ProfessorAggregatedResults,
-    ChangePassword
+    ChangePassword,
+    ProfQuestions
 } from '../containers'
 
 // import LostPage from './components/404/404'
@@ -46,6 +47,7 @@ export default class BusWaysRoutes extends React.Component{
                     <Route exact path='/professorHome/assessments' component={AllAssesmentProfessor}/>
                     <Route exact path='/professorHome/teams' component={Teams}/>
                     <Route exact path='/professorHome/aggregatedresults' component={ProfessorAggregatedResults}/>
+                    <Route exact path='/professorHome/questions' component={ProfQuestions}/>
                     <Route exact path='/changepassword' component={ChangePassword}/>
 
 

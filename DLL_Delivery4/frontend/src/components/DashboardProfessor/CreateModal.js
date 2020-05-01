@@ -78,7 +78,7 @@ export default function FormDialog(props) {
     if(props.type==='student'){
       create=(
         <Dialog open={props.open} onClose={props.close} aria-labelledby="form-dialog-title" TransitionComponent={Transition}>
-        <DialogTitle id="form-dialog-title">Create a new Assessment</DialogTitle>
+        <DialogTitle id="form-dialog-title">Create a new Student</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Student Name 
@@ -156,7 +156,52 @@ export default function FormDialog(props) {
       </Dialog>
       )
     }
-  
+  if(props.type==='question'){
+      create=(
+        <Dialog open={props.open} onClose={props.close} aria-labelledby="form-dialog-title" TransitionComponent={Transition}>
+        <DialogTitle id="form-dialog-title">Create a new Question</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Question
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="question"
+            label="Question"
+            type="text"
+            fullWidth
+            onChange={props.onChangeHandler}
+          />
+
+
+      <FormControl variant="filled" style={{width:'100%'}}>
+        <InputLabel id="demo-simple-select-filled-label">Team</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="question"
+          name="question"
+          value={props.typeSelected}
+          onChange={props.typeSelectHandler}
+        >
+
+          {props.types.map(type=><MenuItem key={type.name} value={type.name}>{type.name}</MenuItem>)}
+
+        </Select>
+      </FormControl>
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.close} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={props.submit} color="primary" disabled={props.question!==null && props.questiontype!==null?false:true}>
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+      )
+    }
   return (
     <div>
      {create}

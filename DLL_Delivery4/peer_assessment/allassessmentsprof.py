@@ -160,6 +160,8 @@ def add_question(request):
     q = data.get("question")
     question = Question.objects.create(question=q, type=q_type)
     question.save()
+    q = Question.objects.get(pk=question.id)
+    a = serializers.serialize('json', [q, ])
 
     
 
@@ -170,7 +172,7 @@ def add_question(request):
 
     print(b)
     print(data)
-    return Response(a, status=status.HTTP_200_OK)
+    return Response(q, status=status.HTTP_200_OK)
 
 
 @requires_csrf_token
@@ -184,4 +186,5 @@ def view_all_questions(request):
     except:
         b = "F"
     print(b)
+    print(questions)
     return Response(questions, status=status.HTTP_200_OK)
