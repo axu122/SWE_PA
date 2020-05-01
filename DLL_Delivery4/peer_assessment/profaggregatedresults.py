@@ -22,59 +22,73 @@ def view_aggregated_results(request):
     t = data.get("type")
     selectedClass = data.get("selectedClass")
     selectedAssessment = data.get("selectedAssessment")
-    print(data)
 
-    print("In student homepage servlet")
     b = "Fail"
 
-    # students = list()
-    # teams = list()
     studentsGrid = list()
     teamsGrid = list()
+
     try:
+        all_mc_questions = Question.objects.filter(type="Multiple Choice")
+        questions = Assessment_Question.objects.filter(
+            assessment_id=selectedAssessment)
+        mc_questions = questions.filter(question_id__in=all_mc_questions)
 
         c = Class.objects.get(pk=selectedClass)
         g = Group.objects.filter(class_id=c)
-        # groups = serializers.serialize('json', g)
-
-        # gs = Group_Student.objects.filter(group_id__in=g).values_list("student_id", flat=True)
-        # s = User.objects.filter(pk__in=gs)
-        # students = serializers.serialize('json', s)  # converts query set into json string.
-        # print(groups)
-        # print(students)
 
         for team in g:
-            print("made it in the loop")
-            gs = Group_Student.objects.filter(group_id=team).values_list("student_id", flat=True)
-            print("made it past query 1")
-            s = User.objects.filter(pk__in=gs).values_list('first_name', 'last_name')
             stu = list()
-            # print(s)
             t = team.group_name
-            for student in s:
-                name = student[0] + " " + student[1]
+
+            gs = Group_Student.objects.filter(group_id=team)
+            ids = list()
+            for i in gs:
+                ids.append(i.student_id.id)
+            user_id = User.objects.filter(pk__in=ids)
+
+            team_score_sum = 0
+            team_member_count = 0
+            for user in user_id:
+                team_member_count += 1
+                gradee = Grade.objects.filter(gradee=user)
+                gradee = gradee.filter(assessment_question__in=mc_questions)
+                score = 0
+                count = 0
+                for grad in gradee:
+                    if(grad.score != ""):
+                        score += int(grad.score)
+                    count += 1
+                avg_score = score/count
+                team_score_sum += avg_score
+                name = user.first_name + " " + user.last_name
+
                 stu.append(name)
-                print("made to end of second loop")
+
                 studentsGrid.append(
                     {
                         "name": name,
-                        "team": t
+                        "team": t,
+                        "avg_score": avg_score
                     }
                 )
+            if team_member_count != 0:
+                team_avg_score = team_score_sum/team_member_count
+            else:
+                team_avg_score = 0
             teamsGrid.append(
                 {
                     "name": t,
-                    "members": stu
+                    "members": stu,
+                    "avg_score": team_avg_score
                 }
             )
         print(studentsGrid)
+        print("@@@@@@@@@@@@@@")
         print(teamsGrid)
-
         b = "success"
     except:
         b = "Fail"
-
     print(b)
 
-    # return Response([groups, students], status=status.HTTP_200_OK)
     return Response([studentsGrid, teamsGrid], status=status.HTTP_200_OK)
