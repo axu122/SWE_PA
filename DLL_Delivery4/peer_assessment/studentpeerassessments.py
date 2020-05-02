@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from peer_assessment.models import *
 from django.core import serializers
+import json
 import datetime
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
@@ -151,11 +152,29 @@ def student_grade(request):
     toDoIndex = data.get("toDoIndex")
     todoSelected = data.get("todoSelected")
     email = data.get("email")
-
+    answers = data.get("answers")
+    # a = json.loads(answers)
+    print(answers)
     t = data.get("type")
 
     print(toDoIndex)
     print(todoSelected)
+    assessment = Assessment.objects.get(pk=todoSelected['pk'])
+    print(assessment)
+    grader = User.objects.get(email=email)
+    for i in answers:
+        # print(i)
+        gradee = User.objects.get(pk=i)
+        print(gradee)
+        for j in answers[i]:
+            question = Question.objects.get(pk=j)
+            aq = Assessment_Question.objects.get(assessment_id=assessment, question_id=question)
+            grade = Grade.objects.get(grader=grader, gradee=gradee, assessment_question=aq)
+            grade.score = answers[i][j]
+            grade.completion = True
+            grade.save()
+            print(str(j) + ' : ' + str(answers[i][j])) #j is key, answers[i][j] is value
+            print(grade)
 
     b = "F"
     # Try to write to database to add assessment to list, dummy code in place

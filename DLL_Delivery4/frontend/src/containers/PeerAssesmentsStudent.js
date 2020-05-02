@@ -39,11 +39,8 @@ class StudentHome extends Component {
     teamMembers:[],
     questionsMC:[],
     questionsOR:[],
-    responsesMC:[],
-    responsesOR:[],
     answers:{},
-    comment9: null,
-    comment10: null,
+    submittable: false,
 
     logout: false,
     changePassword: false,
@@ -87,6 +84,7 @@ class StudentHome extends Component {
         answers: ans
       });
     }
+    this.checkSubmittable()
   };
 
   // *------------ HANDLE CHANGE TEXT ----------------*
@@ -103,12 +101,36 @@ class StudentHome extends Component {
     }
   };
 
+  checkSubmittable = () => {
+    if(this.submittable==true){
+        return
+    }
+    //check each user in the answers object. Check if size = questionsMC.length+questionsOR.length
+    var qLength = this.state.questionsMC.length+this.state.questionsOR.length
+    var submitState = true
+    if(Object.keys(this.state.answers).length != this.state.teamMembers.length){
+        submitState = false
+    }
+    else{
+        for (var x in this.state.answers){
+            if(Object.keys(this.state.answers[x]).length != qLength){
+                submitState = false
+                break
+            }
+        }
+    }
+    this.setState({
+        submittable: submitState
+    })
+  }
+
   //  *------------Submit ToDo Functions -------------*
   submitGradeHandler = (e) => {
     //Http Request
     console.log("Submit student assessment Modal");
     console.log(this.state)
     console.log(e)
+
     //--------------------------------------------------------------------
     //function to get the cookie from req in order to handle the csrf token
     function getCookie(name) {
@@ -273,6 +295,7 @@ class StudentHome extends Component {
           disable={this.state.disableSubmit}
           onTextChangeHandler={this.textHandler}
           onSliderChangeHandler={this.sliderHandler}
+          submittable={this.state.submittable}
         />
         {this.state.changePassword === true ? (
           <Redirect to="/changepassword" />

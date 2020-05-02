@@ -124,7 +124,7 @@ export default function FormDialog(props) {
           <Button onClick={props.close} color="primary">
             Cancel
           </Button>
-          <Button onClick={props.submit} color="primary" disabled={props.disable}>
+          <Button onClick={props.submit} color="primary" disabled={!props.submittable}>
             Submit
           </Button>
         </DialogActions>
