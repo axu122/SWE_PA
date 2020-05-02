@@ -19,10 +19,13 @@ class ProfQuestions extends Component {
 
     logout: false,
     changePassword: false,
+
     createModal: false,
-    newQuestion: null,
-    newQuestionType: null,
+    question: null,
+    typeSelect: null,
+
     notificationQuestion: false,
+    notificationQuestionFailed:false,
     ranRequest: false,
 
     email: localStorage.getItem("userEmail"),
@@ -64,6 +67,12 @@ class ProfQuestions extends Component {
     });
   };
 
+  typeSelectHandler = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
   handleClose = () => {
     this.setState({
       createModal: false,
@@ -71,7 +80,7 @@ class ProfQuestions extends Component {
   };
 
   //  *------------ Create Functions -------------*
-  submitNewStudentHandler = () => {
+  submitNewQuestionHandler = () => {
     //--------------------------------------------------------------
     console.log("create question");
     //function to get the cookie from req in order to handle the csrf token
@@ -100,8 +109,8 @@ class ProfQuestions extends Component {
       .post(
         "/makenewquestion/",
         {
-          question: this.state.newQuestion,
-          questionType: this.state.newQuestionType,
+          question: this.state.question,
+          questionType: this.state.typeSelect,
           email: localStorage.getItem("userEmail"),
           type: localStorage.getItem("userType"),
         },
@@ -115,11 +124,21 @@ class ProfQuestions extends Component {
         (response) => {
           var data = response.data;
           console.log(response.data);
-          var a = JSON.parse(data)
-          this.state.questions.push(a[0]);
-          this.setState({
-            ranRequest: false
-          });
+
+          if(data!="None"){
+              var a = JSON.parse(data)
+              this.state.questions.push(a[0]);
+              this.setState({
+                ranRequest: false,
+                notificationQuestion: true,
+              });
+          }
+          else{
+            this.setState({
+                notificationQuestionFailed: true,
+                ranRequest: false
+            });
+          }
         },
         (error) => {
           console.log(error);
@@ -135,10 +154,9 @@ class ProfQuestions extends Component {
 
     this.setState({
       questions: this.state.questions,
-      newQuestion: null,
-      newQuestionType: null,
+      question: null,
+      typeSelect: null,
       createModal: false,
-      notificationQuestion: true,
     });
   };
 
@@ -238,16 +256,21 @@ class ProfQuestions extends Component {
           close={this.handleClose}
           open={this.state.createModal}
           onChangeHandler={this.textHandler}
-          question={this.state.newQuestion}
-          questiontype={this.state.newQuestionType}
+          question={this.state.question}
+          typeSelect={this.state.typeSelect}
           submit={this.submitNewQuestionHandler}
           type="question"
           types={this.state.types}
-          teamSelectHandler={this.teamSelectHandler}
+          typeSelectHandler={this.typeSelectHandler}
         />
         <SnackBar
           message="Question Created"
           open={this.state.notificationQuestion}
+          handleClose={this.handleCloseNot}
+        />
+        <SnackBar
+          message="Question Already Exists"
+          open={this.state.notificationQuestionFailed}
           handleClose={this.handleCloseNot}
         />
         {this.state.changePassword === true ? (

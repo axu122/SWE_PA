@@ -96,10 +96,11 @@ class Assessment(models.Model):
     due_date = models.DateField(null=False)
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE, null=False)
     released = models.BooleanField(default=False, null=False)
+    # sent_email= models.BooleanField(default=False, null=False)
 
 class Question(models.Model):
     def __str__(self):
-        return self.question
+        return str(self.id) + ": " + self.question
 
     TYPE = [
         ('Multiple Choice', 'Multiple Choice'),
@@ -135,8 +136,8 @@ class Grade(models.Model):
     grader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='grader', null=False)
     gradee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='gradee', null=False)
     assessment_question = models.ForeignKey(Assessment_Question, on_delete=models.CASCADE, null=False)
-    score = models.CharField(max_length=100, blank=True, null=True)
-    # completion = models.BooleanField(default=False, null=False)
+    score = models.CharField(max_length=100, blank=True, null=True, default=None)
+    completion = models.BooleanField(default=False, null=False)
 
 # class Grader(models.Model):
 #

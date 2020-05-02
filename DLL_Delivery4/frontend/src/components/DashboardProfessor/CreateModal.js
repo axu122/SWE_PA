@@ -176,11 +176,11 @@ export default function FormDialog(props) {
 
 
       <FormControl variant="filled" style={{width:'100%'}}>
-        <InputLabel id="demo-simple-select-filled-label">Team</InputLabel>
+        <InputLabel id="demo-simple-select-filled-label">Question Type</InputLabel>
         <Select
           labelId="demo-simple-select-filled-label"
-          id="question"
-          name="question"
+          id="typeSelect"
+          name="typeSelect"
           value={props.typeSelected}
           onChange={props.typeSelectHandler}
         >
@@ -195,7 +195,7 @@ export default function FormDialog(props) {
           <Button onClick={props.close} color="primary">
             Cancel
           </Button>
-          <Button onClick={props.submit} color="primary" disabled={props.question!==null && props.questiontype!==null?false:true}>
+          <Button onClick={props.submit} color="primary" disabled={props.question!==null && props.typeSelect!==null?false:true}>
             Create
           </Button>
         </DialogActions>
