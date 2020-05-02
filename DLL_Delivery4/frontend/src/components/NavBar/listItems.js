@@ -30,7 +30,7 @@ export const mainListItems = (
       <ListItemIcon>
         <LayersIcon />
       </ListItemIcon>
-      <ListItemText primary="Completed" />
+      <ListItemText primary="Results" />
     </ListItem>
   </div>
 );

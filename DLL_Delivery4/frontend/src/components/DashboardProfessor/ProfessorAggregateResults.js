@@ -30,7 +30,7 @@ const ProfessorAggregateResults = props=>{
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
                         <Typography variant='h5' color='primary'> <b>{e.name}</b> </Typography>
                         <Typography variant='subtitle1'> <b>Team: </b>{e.team}</Typography>
-                        <Typography variant='subtitle1'> <b>Overall Grade:</b> 5/5 </Typography>
+                        <Typography variant='subtitle1'> <b>Overall Grade:</b> {e.avg_score}/5 </Typography>
                         <Button outlined color="primary" onClick={()=>props.studentDelete(i)}> Delete </Button>
                     </CardContent>
                     </CardActions>
@@ -60,6 +60,7 @@ const ProfessorAggregateResults = props=>{
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
                         <Typography variant='h5' color='primary'> <b>{e.name}</b> </Typography>
                         <Typography variant='subtitle1' > <b>Members:</b> {e.members.map(name=><Typography variant='caption'>{name} </Typography>)} </Typography>
+                        <Typography variant='subtitle1'> <b>Overall Grade:</b> {e.avg_score}/5 </Typography>
 
                     </CardContent>
                     </CardActions>

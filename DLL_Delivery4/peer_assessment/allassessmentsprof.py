@@ -33,7 +33,7 @@ def view_assessments(request):
     closed = list()
     open = list()
     for i in a:
-        if i.due_date > datetime.date.today():
+        if i.due_date >= datetime.date.today():
             open.append(i)
         else:
             closed.append(i)

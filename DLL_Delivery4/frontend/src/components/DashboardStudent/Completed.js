@@ -30,15 +30,14 @@ const StudentHome = props=>{
         closedArr=props.completedArr.map((e,i)=>(
             <Grid item xs={12} md={6} sm={6} key={e.id}>
                 <Card>
-
+                    <CardActions onClick={()=>props.openModal(i)}>
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
                         <Typography variant='h5'> <b>{e.fields.assessment_name}</b> </Typography>
                         <Typography variant='subtitle1' > <b>Due date:</b> {Moment(e.fields.due_date).format('MMMM Do YYYY')}</Typography>
-                        <Typography variant='subtitle2' > <b>Overall: </b> {e.overAll}/5 </Typography>
-                        <Typography variant='subtitle2' > <b>Teacher's note: </b> {e.teachersComment} </Typography>
+                        <Typography variant='subtitle2' > Click to see Aggregated Results </Typography>
 
                     </CardContent>
-                    
+                    </CardActions>
                 </Card>
             </Grid>
             
@@ -61,7 +60,7 @@ const StudentHome = props=>{
 
             <Grid item sm={10} xs={10}>
                 <Typography variant="h4" style={{color:'#39DA8A'}}>
-                    Completed
+                    Released Results
                 </Typography>
             </Grid>
 

@@ -87,6 +87,37 @@ export default function FormDialog(props) {
             </div>
         )
   }
+    if (props.type==='detailedStudentResults'){
+        profAssess = (
+            <div>
+              <Dialog open={props.open} onClose={props.close} aria-labelledby="form-dialog-title" TransitionComponent={Transition}>
+                <DialogTitle id="form-dialog-title">{props.info?props.info.name:""}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please review the students overall scores and leave a comment.
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="comment"
+                    label="Comment"
+                    type="text"
+                    fullWidth
+                  />
+
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={props.close} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={props.submit} color="primary">
+                    Submit
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+        )
+    }
   return (
     <div>
         {profAssess}

@@ -8,24 +8,7 @@ import axios from "axios";
 // Nav
 import Nav from "../components/NavBar";
 
-//List of assessments for prof to grade??
-//var classes=[
-//    {
-//        name:'Software Engineering',
-//        teams:3
-//    },
-//    {
-//        name:'Computer Science 1',
-//        teams:4
-//    },
-//    {
-//        name:'Computer Science 2',
-//        teams:15
-//    }
-//]
-
 class ProfessorHome extends Component {
-  //    classes = null
 
   state = {
     logout: false,

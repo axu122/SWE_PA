@@ -76,7 +76,7 @@ def view_assessments(request):
     closed = list()
     open = list()
     for i in assess_for_class:
-        if i.due_date > datetime.date.today():
+        if i.due_date >= datetime.date.today():
             open.append(i)
         else:
             closed.append(i)
@@ -110,10 +110,40 @@ def view_completed_assessments(request):
     print(data)
     selectedClass = data.get("studentSelectedClass")
 
+
+
+
+    resMC = list()
+    resOR = list()
+    qpks = [x for x in range(1, 11)]
+    qsMC = Question.objects.filter(pk__in=qpks, type='Multiple Choice')
+    qsOR = Question.objects.filter(pk__in=qpks, type='Open Response')
+
+    for i in qsMC:
+        resMC.append(
+            {
+                "question_id": i.id,
+                "question": i.question,
+                "grade": 0
+            }
+        )
+
+    for i in qsOR:
+        resOR.append(
+            {
+                "question_id": i.id,
+                "question": i.question,
+                "grade": "For Professor View Only"
+            }
+        )
+
+
+
     b = "F"
     # Try to write to database to add assessment to list, dummy code in place
     try:
         student = User.objects.get(email=email)
+        name = student.first_name + " " + student.last_name
         grader = Grade.objects.filter(grader=student)
         ids = list()
         for i in grader:
@@ -124,20 +154,22 @@ def view_completed_assessments(request):
         for i in assess_q:
             ids2.append(i.assessment_id.id)
         a = Assessment.objects.filter(pk__in=ids2)
-        assessments = serializers.serialize('json', a)
 
         c = Class.objects.get(pk=selectedClass)
 
-        assessment_for_specific_class = a.filter(class_id=c)
-        completed = assessment_for_specific_class.filter(released=True)
+        completed = a.filter(class_id=c, released=True)
         print(completed)
+
+
+
         completed_assessments = serializers.serialize('json', completed)
         print(completed_assessments)
+
         b = "t"
     except:
         b = "F"
     print(b)
-    return Response(completed_assessments, status=status.HTTP_200_OK)
+    return Response([completed_assessments, name, resMC, resOR], status=status.HTTP_200_OK)
 
 # Code ran when the student does assessment
 # Also handles csrf token in order to allow the request to go through
@@ -186,3 +218,52 @@ def student_grade(request):
     print(b)
     print(data)
     return Response(b, status=status.HTTP_200_OK)
+
+@requires_csrf_token
+@api_view(['POST'])
+def student_aggregated_results(request):
+    data = request.data
+    email = data.get("email")
+    t = data.get("type")
+    selectedAssessment = data.get("selectedAssessment")
+    aggregatedResultsMC = data.get("aggregatedResultsMC")
+    aggregatedResultsOR = data.get("aggregatedResultsOR")
+    print(selectedAssessment)
+    print(aggregatedResultsMC)
+    print(aggregatedResultsOR)
+
+    b = "F"
+    user = User.objects.get(email=email)
+    assessment = Assessment.objects.get(pk=selectedAssessment['pk'])
+
+    all_mc_questions = Question.objects.filter(type="Multiple Choice")
+    mc_questions = Assessment_Question.objects.filter(
+        assessment_id=assessment, question_id__in=all_mc_questions)
+
+    grader = Grade.objects.filter(grader=user, assessment_question__in=mc_questions, completion=False)
+    print("len(grader)=" + str(len(grader)))
+    totalscore = 0
+    count = 0
+    avg_score = 0
+    if len(grader) == 0:
+        for i in aggregatedResultsMC:
+            print(i["question_id"])
+            q = Question.objects.get(pk=i["question_id"])
+            aq = Assessment_Question.objects.get(assessment_id=assessment, question_id=q)
+            grades = Grade.objects.filter(gradee=user, assessment_question=aq, completion=True)
+            score = 0
+            for j in grades:
+                score += int(j.score)
+            i["grade"] = round(score/len(grades), 2)
+            totalscore += score/len(grades)
+        avg_score = round(totalscore/len(aggregatedResultsMC), 2)
+
+    try:
+        # user = User.objects.get(email=email, password=currentPassword)
+        b = "t"
+    except:
+        b = "F"
+    print(b)
+    print(data)
+    print(aggregatedResultsMC)
+    return Response([aggregatedResultsMC, avg_score], status=status.HTTP_200_OK)

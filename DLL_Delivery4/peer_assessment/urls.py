@@ -26,6 +26,7 @@ urlpatterns = [
     path('studentteams/', teamshandler.view_teams),
     path('studentpeerassessments/', studentpeerassessments.view_assessments),
     path('studentcompletedassessments/', studentpeerassessments.view_completed_assessments),
+    path('studentaggregatedresults/', studentpeerassessments.student_aggregated_results),
     path('makenewteam/', teamshandler.add_team),
     path('makenewstudent/', teamshandler.add_student),
     path('professordeadlineupdate/', allassessmentsprof.deadline_update),
