@@ -16,79 +16,30 @@ import { Redirect } from "react-router-dom";
 
 class ProfessorAggregatedResults extends Component {
   state = {
-    openToDoModal: false,
     todoSelected: null,
-    todoResponses: null,
     logout: false,
     changePassword: false,
-    createModal: false,
+    notificationRelease: false,
+    notificationDownload: false,
 
-    studentName: null,
-    teamSelected: null,
-    notificationStudent: false,
-
-    teamName: null,
-    notificationTeam: false,
-    createModalTeam: false,
 
     allStudents: [],
-    allTeams: []
-  };
-
-  selectDetailedHandler = (e) => {
-    //add to local storage the class selected
-    console.log("selectedClass");
-    console.log(this.state.classes[e]);
-    this.setState({
-      selectedClass: true,
-      selected: this.state.classes[e],
-      selectedIndex: e,
-    });
-    localStorage.setItem("selectedClass", this.state.classes[e].pk);
-    //        localStorage.setItem('selectedClass', this.state.classes[e])
-    console.log(localStorage.getItem("selectedClass"));
+    allTeams: [],
+    selected: localStorage.getItem("selectedAssessmentName")
   };
 
   // *----------HANDLE MODAL METHODS------------------*
-  openModalHandler = (e) => {
+  selectStudentHandler = (e) => {
     console.log(this.state.allStudents[e]);
     this.setState({
-      openToDoModal: true,
       todoSelected: this.state.allStudents[e],
     });
   };
 
-  handleClose = () => {
+  selectTeamHandler = (e) => {
+    console.log(this.state.allTeams[e]);
     this.setState({
-      openToDoModal: false,
-      createModal: false,
-      createModalTeam: false,
-    });
-  };
-
-  openCreateModal = () => {
-    this.setState({
-      createModal: true,
-    });
-  };
-
-  openCreateModalTeam = () => {
-    this.setState({
-      createModalTeam: true,
-    });
-  };
-
-  // *------------ HANDLE CHANGE TEXT ----------------*
-  textHandler = (e) => {
-    console.log(e);
-    this.setState({
-      [e.target.id]: e.target.value,
-    });
-  };
-
-  teamSelectHandler = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
+      todoSelected: this.state.allTeams[e],
     });
   };
 
@@ -96,6 +47,7 @@ class ProfessorAggregatedResults extends Component {
   releaseResults = () => {
     //--------------------------------------------------------------
     console.log("releaseResults");
+    //ADD CODE FOR RELEASING RESULTS
     //function to get the cookie from req in order to handle the csrf token
     function getCookie(name) {
       var cookieValue = null;
@@ -117,14 +69,11 @@ class ProfessorAggregatedResults extends Component {
     var csrftoken = getCookie("csrftoken");
     //--------------------------------------------------------------
 
-    console.log("create Student req");
     axios
       .post(
-        "/makenewstudent/",
+        "/releaseresults/",
         {
-          name: this.state.studentName,
-          team: this.state.teamSelected,
-          overallGrade: "0",
+//          overallGrade: "0",
           email: localStorage.getItem("userEmail"),
           type: localStorage.getItem("userType"),
         },
@@ -145,24 +94,15 @@ class ProfessorAggregatedResults extends Component {
       );
     //--------------------------------------------------------------
 
-//    this.state.allStudents.push({
-//      name: this.state.studentName,
-//      team: this.state.teamSelected,
-//      overallGrade: "0",
-//    });
-
     this.setState({
-      allStudents: this.state.allStudents,
-      studentName: null,
-      teamSelected: null,
-      createModal: false,
-      notificationStudent: true,
+      notificationRelease: true,
     });
   };
 
   downloadResults = () => {
+      //ADD CODE FOR DOWNLOADING RESULTS
     //--------------------------------------------------------------
-    console.log("create team");
+    console.log("download results");
     //function to get the cookie from req in order to handle the csrf token
     function getCookie(name) {
       var cookieValue = null;
@@ -184,14 +124,13 @@ class ProfessorAggregatedResults extends Component {
     var csrftoken = getCookie("csrftoken");
     //--------------------------------------------------------------
 
-    console.log("create team req");
+    console.log("downloading");
     axios
       .post(
-        "/makenewteam/",
+        "/downloadresults/",
         {
-          name: this.state.teamName,
-          members: [],
-          overallGrade: "0",
+//          members: [],
+//          overallGrade: "0",
           email: localStorage.getItem("userEmail"),
           type: localStorage.getItem("userType"),
         },
@@ -210,20 +149,10 @@ class ProfessorAggregatedResults extends Component {
           console.log(error);
         }
       );
+      this.setState({
+          notificationDownload: true,
+      });
     //--------------------------------------------------------------
-
-    //Should probably remove this when done
-    this.state.allTeams.push({
-      name: this.state.teamName,
-      members: [],
-      overallGrade: "0",
-    });
-
-    this.setState({
-      teamName: null,
-      createModalTeam: false,
-      notificationTeam: true,
-    });
   };
 
   //  *------------ CLOSE NOTIFICATION ----------------*
@@ -233,14 +162,14 @@ class ProfessorAggregatedResults extends Component {
     }
 
     this.setState({
-      notificationStudent: false,
-      notificationTeam: false,
+      notificationRelease: false,
+      notificationDownload: false,
     });
   };
 
   // *------ Remind STUDENT ---------*
   remind = (index) => {
-    this.state.allStudents.splice(index, 1);
+//    this.state.allStudents.splice(index, 1);
     this.setState({
       allStudents: this.state.allStudents,
     });
@@ -332,43 +261,23 @@ class ProfessorAggregatedResults extends Component {
         <ProfessorAggregateResults
           students={this.state.allStudents}
           teams={this.state.allTeams}
-          openCreateModalTeam={this.openCreateModalTeam}
-          openCreate={this.openCreateModal}
+          releaseResults={this.releaseResults}
+          download={this.downloadResults}
           studentDelete={this.remind}
-        />
-
-        {/* Modal Student Create */}
-        <CreateModal
-          close={this.handleClose}
-          open={this.state.createModal}
-          onChangeHandler={this.textHandler}
-          studentName={this.state.studentName}
-          teamSelected={this.state.teamSelected}
-          submit={this.releaseResults}
-          type="student"
-          teams={this.state.allTeams}
-          teamSelectHandler={this.teamSelectHandler}
-        />
-
-        {/* Modal Team Create */}
-        <CreateModal
-          close={this.handleClose}
-          open={this.state.createModalTeam}
-          onChangeHandler={this.textHandler}
-          teamName={this.state.teamName}
-          submit={this.downloadResults}
-          type="team"
+          selected={this.state.selected}
+          selectStudent={this.selectStudentHandler}
+          selectTeam={this.selectTeamHandler}
         />
 
         <SnackBar
-          message="Student Created"
-          open={this.state.notificationStudent}
+          message="Downloading Results"
+          open={this.state.notificationDownload}
           handleClose={this.handleCloseNot}
         />
 
         <SnackBar
-          message="Team Created"
-          open={this.state.notificationTeam}
+          message="Released Results"
+          open={this.state.notificationRelease}
           handleClose={this.handleCloseNot}
         />
         {this.state.changePassword === true ? (

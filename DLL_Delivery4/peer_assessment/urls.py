@@ -30,5 +30,9 @@ urlpatterns = [
     path('makenewstudent/', teamshandler.add_student),
     path('professordeadlineupdate/', allassessmentsprof.deadline_update),
     path('studentgrade/', studentpeerassessments.student_grade),
-    path('resultsaggregated/', profaggregatedresults.view_aggregated_results)
+    path('resultsaggregated/', profaggregatedresults.view_aggregated_results),
+    path('getquestions/', allassessmentsprof.view_all_questions),
+    path('makenewquestion/', allassessmentsprof.add_question),
+    path('releaseresults/', profaggregatedresults.release_results),
+    path('downloadresults/', profaggregatedresults.download_results)
 ]

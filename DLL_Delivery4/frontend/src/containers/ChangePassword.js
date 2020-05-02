@@ -22,7 +22,9 @@ class ChangePassword extends Component{
         successfulChange:false,
         professorRedirect:false,
         studentRedirect:false,
-        sidebar:null
+        sidebar:null,
+        userType:null,
+        determined:false,
     }
 
     onLogout=()=>{
@@ -159,6 +161,22 @@ class ChangePassword extends Component{
 //                 sidebar:'Professor'
 //             })
 //         }
+        if(!this.state.determined){
+            if(localStorage.getItem('userType')=='Professor'){
+                this.setState({
+                    userType:'ProfessorHome'
+                })
+            }
+            else{
+                this.setState({
+                    userType:'StudentHome'
+                })
+            }
+            this.setState({
+                determined:true
+            })
+        }
+
         let pageContent = (
             <ChangePasswordPage
                 textHandler={this.textHandler}
@@ -168,9 +186,11 @@ class ChangePassword extends Component{
 
         )
         console.log('changepwdpage')
+
         return(
             <Nav
 //                 user={this.state.sidebar}
+                user={this.state.userType}
                 onLogout={this.onLogout}
             >
 

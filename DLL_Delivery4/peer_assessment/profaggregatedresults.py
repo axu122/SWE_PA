@@ -92,3 +92,47 @@ def view_aggregated_results(request):
     print(b)
 
     return Response([studentsGrid, teamsGrid], status=status.HTTP_200_OK)
+
+
+@requires_csrf_token
+@api_view(['POST'])
+def release_results(request):
+    """
+        List all code snippets, or create a new snippet.
+        """
+    data = request.data
+    email = data.get("email")
+    t = data.get("type")
+    # selectedClass = data.get("selectedClass")
+    # selectedAssessment = data.get("selectedAssessment")
+
+    b = "Fail"
+    try:
+
+        b = "success"
+    except:
+        b = "Fail"
+    print(b)
+    return Response(b, status=status.HTTP_200_OK)
+
+@requires_csrf_token
+@api_view(['POST'])
+def download_results(request):
+    """
+        List all code snippets, or create a new snippet.
+        """
+    data = request.data
+    email = data.get("email")
+    t = data.get("type")
+    # selectedClass = data.get("selectedClass")
+    # selectedAssessment = data.get("selectedAssessment")
+
+    b = "Fail"
+    try:
+
+        b = "success"
+    except:
+        b = "Fail"
+    print(b)
+    return Response(b, status=status.HTTP_200_OK)
+

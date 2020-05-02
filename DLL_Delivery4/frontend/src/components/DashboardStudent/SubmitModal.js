@@ -50,32 +50,58 @@ const marks = [
 
 export default function FormDialog(props) {
   let teamMatesForm;
-  if(props.info !==null && props.info.teamMates.length>0){
-    teamMatesForm= props.info.teamMates.map(e=>(
+
+  if(props.info !==null && props.teamMembers.length>0){
+    teamMatesForm= props.teamMembers.map(e=>(
 
         <React.Fragment>
 
-        <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
-        <b> {e}'s</b> Score. (0=Lowest / 5=Best)
-        </Typography>
-      <Slider
-        defaultValue={0}
-        getAriaValueText={valuetext}
-        valueLabelDisplay="auto"
-        step={1}
-        marks={marks}
-        min={0}
-        max={5}
-      />
-        <TextField
-            autoFocus
-            margin="dense"
-            id={`comment${e}`}
-            label={`Comment on ${e}`}
-            type="text"
-            fullWidth
-            onChange={props.onChangeHandler}
-          />
+            <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
+            <b> {e.name}'s</b> Score. (0=Lowest / 5=Best)
+            </Typography>
+              {
+                props.questionsMC.map(eMC=>(
+                    <React.Fragment>
+
+                        <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
+                        {eMC.fields.question}
+                        </Typography>
+                          <Slider
+                            id={`${e.pk}_${eMC.pk}`}
+                            defaultValue={0}
+                            getAriaValueText={valuetext}
+                            valueLabelDisplay="auto"
+                            step={1}
+                            marks={marks}
+                            min={0}
+                            max={5}
+                            onChangeCommitted={props.onSliderChangeHandler}
+                          />
+
+                    </React.Fragment>
+                ))
+              }
+
+              {
+                props.questionsOR.map(eOR=>(
+                    <React.Fragment>
+
+                        <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
+                        {eOR.fields.question}
+                        </Typography>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id={`${e.pk}_${eOR.pk}`}
+                            label={`Comment`}
+                            type="text"
+                            fullWidth
+                            onChange={props.onTextChangeHandler}
+                          />
+
+                    </React.Fragment>
+                ))
+              }
 
         </React.Fragment>
 
@@ -89,7 +115,7 @@ export default function FormDialog(props) {
         <DialogTitle id="form-dialog-title">{props.info?props.info.name:null}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please fill out the peer assesment for each of your teammates
+            Please fill out the peer assessment for each of your teammates
           </DialogContentText>
          {teamMatesForm}
 
@@ -98,7 +124,7 @@ export default function FormDialog(props) {
           <Button onClick={props.close} color="primary">
             Cancel
           </Button>
-          <Button onClick={props.submit} color="primary" disabled={props.disable}>
+          <Button onClick={props.submit} color="primary" disabled={!props.submittable}>
             Submit
           </Button>
         </DialogActions>

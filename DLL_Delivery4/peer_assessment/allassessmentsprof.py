@@ -80,8 +80,10 @@ def add_assessment(request):
 
     assessment = Assessment.objects.create(assessment_name=assessmentName, due_date=dueDate,
                                            start_date=startDate, class_id=c)
+    print(class_groups)
     assessment.save()
-    qs = Question.objects.all()
+    qpks = [x for x in range(1,11)]
+    qs = Question.objects.filter(pk__in=qpks)
     assess_qs = list()
     for q in qs:
         assess_q = Assessment_Question.objects.create(
@@ -156,20 +158,28 @@ def deadline_update(request):
 @api_view(['POST'])
 def add_question(request):
     data = request.data
-    q_type = data.get("type")
-    q = data.get("question")
-    question = Question.objects.create(question=q, type=q_type)
-    question.save()
+    q_type = data.get("questionType")
+    question = data.get("question")
 
-    
+
+
 
     try:
-        b = "t"
+        b = "already in db"
+        qGet = Question.objects.get(question=question, type=q_type)
+        print("found in db")
+        a = "None"
+
     except:
-        b = "F"
+        b = "adding to db"
+        question = Question.objects.create(question=question, type=q_type)
+        question.save()
+        q = Question.objects.get(pk=question.id)
+        a = serializers.serialize('json', [q, ])
 
     print(b)
     print(data)
+    print(a)
     return Response(a, status=status.HTTP_200_OK)
 
 
@@ -184,4 +194,5 @@ def view_all_questions(request):
     except:
         b = "F"
     print(b)
+    print(questions)
     return Response(questions, status=status.HTTP_200_OK)

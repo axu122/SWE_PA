@@ -36,6 +36,12 @@ class StudentHome extends Component {
     todoSelected: null,
     toDoIndex: null,
     todoResponses: null,
+    teamMembers:[],
+    questionsMC:[],
+    questionsOR:[],
+    answers:{},
+    submittable: false,
+
     logout: false,
     changePassword: false,
     disableSubmit: false,
@@ -49,6 +55,7 @@ class StudentHome extends Component {
   // *----------HANDLE MODAL METHODS------------------*
   openModalHandler = (e) => {
     console.log(this.state.currAssessments[e]);
+    console.log("open diag")
     console.log(e);
     this.setState({
       openToDoModal: true,
@@ -63,10 +70,66 @@ class StudentHome extends Component {
     });
   };
 
+  updateValue = (id, value) => {
+    var items = id.split('_')
+    if (items.length == 2) {
+      var nameId = items[0];
+      var ansId = items[1];
+      var ans = this.state.answers;
+      if (!(nameId in ans)) {
+        ans[nameId] = {}
+      }
+      ans[nameId][ansId] = value;
+      this.setState({
+        answers: ans
+      });
+    }
+    this.checkSubmittable()
+  };
+
+  // *------------ HANDLE CHANGE TEXT ----------------*
+  textHandler = (e) => {
+    this.updateValue(e.target.id, e.target.value);
+  };
+
+  sliderHandler = (e, val) => {
+    for (var p in e.path) {
+      if (e.path[p].id != "") {
+        this.updateValue(e.path[p].id, val);
+        return;
+      }
+    }
+  };
+
+  checkSubmittable = () => {
+    if(this.submittable==true){
+        return
+    }
+    //check each user in the answers object. Check if size = questionsMC.length+questionsOR.length
+    var qLength = this.state.questionsMC.length+this.state.questionsOR.length
+    var submitState = true
+    if(Object.keys(this.state.answers).length != this.state.teamMembers.length){
+        submitState = false
+    }
+    else{
+        for (var x in this.state.answers){
+            if(Object.keys(this.state.answers[x]).length != qLength){
+                submitState = false
+                break
+            }
+        }
+    }
+    this.setState({
+        submittable: submitState
+    })
+  }
+
   //  *------------Submit ToDo Functions -------------*
-  submitGradeHandler = () => {
+  submitGradeHandler = (e) => {
     //Http Request
     console.log("Submit student assessment Modal");
+    console.log(this.state)
+    console.log(e)
 
     //--------------------------------------------------------------------
     //function to get the cookie from req in order to handle the csrf token
@@ -97,6 +160,7 @@ class StudentHome extends Component {
       .post(
         "/studentgrade/",
         {
+          answers: this.state.answers,
           toDoIndex: this.state.toDoIndex,
           todoSelected: this.state.todoSelected,
           email: localStorage.getItem("userEmail"),
@@ -190,11 +254,16 @@ class StudentHome extends Component {
               var data = response.data;
               console.log("responded to get request");
               console.log(response.data);
+              console.log(data[2])
               this.setState({
-                  currAssessments: JSON.parse(data),
-    //              pastAssessments: JSON.parse(data[1]),
+                  currAssessments: JSON.parse(data[0]),
+                  pastAssessments: JSON.parse(data[1]),
+                  teamMembers: data[2],
+                  questionsMC: JSON.parse(data[3]),
+                  questionsOR: JSON.parse(data[4]),
                   ranRequest: true
               })
+
             },
             (error) => {
               console.log(error);
@@ -219,9 +288,14 @@ class StudentHome extends Component {
           close={this.handleClose}
           open={this.state.openToDoModal}
           info={this.state.todoSelected}
+          teamMembers={this.state.teamMembers}
+          questionsMC={this.state.questionsMC}
+          questionsOR={this.state.questionsOR}
           submit={this.submitGradeHandler}
           disable={this.state.disableSubmit}
-          //onChangeHandler={} For when stuff is typed into comments
+          onTextChangeHandler={this.textHandler}
+          onSliderChangeHandler={this.sliderHandler}
+          submittable={this.state.submittable}
         />
         {this.state.changePassword === true ? (
           <Redirect to="/changepassword" />
