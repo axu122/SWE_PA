@@ -48,8 +48,8 @@ class StudentHome extends Component {
       selected: this.state.closedAssessments[e],
       selectedIndex: e,
     });
-    localStorage.setItem("selectedAssessment", this.state.allAssessments[e].pk);
-    localStorage.setItem("selectedAssessmentName", this.state.allAssessments[e].fields.assessment_name);
+    localStorage.setItem("selectedAssessment", this.state.closedAssessments[e].pk);
+    localStorage.setItem("selectedAssessmentName", this.state.closedAssessments[e].fields.assessment_name);
     //        localStorage.setItem('selectedClass', this.state.classes[e])
     console.log(localStorage.getItem("selectedAssessment"));
   };
@@ -343,6 +343,7 @@ class StudentHome extends Component {
           openModal={this.openModalHandler}
           openCreate={this.openCreateModal}
           selectAssessment={this.selectAssessmentHandler}
+          selectClosedAssessment={this.selectAssessmentHandler}
         />
 
         <ToDOModal

@@ -105,10 +105,10 @@ const ProfessorAggregateResults = props=>{
                 {assessmentName}
             </Grid>
             <Grid item container sm={10} xs={10}>
-                    <Button variant='outlined' color='primary' onClick={props.openCreateModalTeam}>
+                    <Button variant='outlined' color='primary' onClick={props.releaseResults}>
                         Release Results
                     </Button>
-                    <Button variant='outlined' color='primary' onClick={props.openCreate}>
+                    <Button variant='outlined' color='primary' onClick={props.download}>
                         Download Results
                     </Button>
             </Grid>
