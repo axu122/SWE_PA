@@ -119,8 +119,8 @@ class Assessment_Question(models.Model):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE, null=False)
 
 class Group_Assessment(models.Model):
-    # def __str__(self):
-    #     return self.group_assessment_id
+    def __str__(self):
+        return self.group_id.group_name + ' ' + self.assessment_id.assessment_name
     # group_assessment_id = models.AutoField(primary_key=True)
     group_id = models.ForeignKey(Group, on_delete=models.CASCADE, null=False)
     assessment_id = models.ForeignKey(Assessment, on_delete=models.CASCADE, null=False)

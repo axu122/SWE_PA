@@ -25,7 +25,9 @@ class ProfessorAggregatedResults extends Component {
 
     allStudents: [],
     allTeams: [],
-    selected: localStorage.getItem("selectedAssessmentName")
+    selected: localStorage.getItem("selectedAssessmentName"),
+    selectedUser: false,
+    selectedTeam: false,
   };
 
   // *----------HANDLE MODAL METHODS------------------*
@@ -33,6 +35,7 @@ class ProfessorAggregatedResults extends Component {
     console.log(this.state.allStudents[e]);
     this.setState({
       todoSelected: this.state.allStudents[e],
+      selectedUser: true,
     });
   };
 
@@ -40,6 +43,7 @@ class ProfessorAggregatedResults extends Component {
     console.log(this.state.allTeams[e]);
     this.setState({
       todoSelected: this.state.allTeams[e],
+      selectedTeam:true
     });
   };
 
@@ -73,7 +77,7 @@ class ProfessorAggregatedResults extends Component {
       .post(
         "/releaseresults/",
         {
-//          overallGrade: "0",
+          selectedAssessment: localStorage.getItem("selectedAssessment"),
           email: localStorage.getItem("userEmail"),
           type: localStorage.getItem("userType"),
         },
@@ -280,6 +284,12 @@ class ProfessorAggregatedResults extends Component {
           open={this.state.notificationRelease}
           handleClose={this.handleCloseNot}
         />
+        {this.state.selectedUser === true ? (
+          <Redirect to="/professorHome/aggregatedresults/user" />
+        ) : null}
+        {this.state.selectedTeam === true ? (
+          <Redirect to="/professorHome/aggregatedresults/team" />
+        ) : null}
         {this.state.changePassword === true ? (
           <Redirect to="/changepassword" />
         ) : null}
