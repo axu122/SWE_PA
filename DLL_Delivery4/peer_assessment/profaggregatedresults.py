@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from peer_assessment.models import *
 from django.core import serializers
+from django.http import HttpResponse
 
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
@@ -132,23 +133,23 @@ def release_results(request):
     return Response(b, status=status.HTTP_200_OK)
 
 @requires_csrf_token
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 def download_results(request):
     """
         List all code snippets, or create a new snippet.
         """
-    data = request.data
-    email = data.get("email")
-    t = data.get("type")
+    #data = request.data
+    #email = data.get("email")
+    #t = data.get("type")
     # selectedClass = data.get("selectedClass")
     # selectedAssessment = data.get("selectedAssessment")
 
-    b = "Fail"
-    try:
+    csv = "a,b,c\nd,,f\n"
 
-        b = "success"
-    except:
-        b = "Fail"
-    print(b)
-    return Response(b, status=status.HTTP_200_OK)
+    response = HttpResponse(
+        content=csv.encode(),
+        content_type="text/csv",
+    )
+    response["Content-Disposition"] = 'attachment; filename="assessment_results.csv"'
+    return response
 
