@@ -142,15 +142,39 @@ def download_results(request):
     """
         List all code snippets, or create a new snippet.
         """
-    #data = request.data
-    #email = data.get("email")
-    #t = data.get("type")
-    # selectedClass = data.get("selectedClass")
-    # selectedAssessment = data.get("selectedAssessment")
     email = request.query_params.get('email')
     user_type = request.query_params.get('type')
-    csv = "a,b,c\nd,,f\n"
+    assessquery = request.query_params.get('assessment')
+    assessment = Assessment.objects.get(pk=assessquery)
+    print(assessment)
+    class_name = assessment.class_id.class_name
+    print(class_name)
 
+    csv = 'Results for assessment: ' + str(assessment.assessment_name) + ' in class: ' + str(class_name) + '\n\n'
+    ga = Group_Assessment.objects.filter(assessment_id=assessment)
+    for i in ga:
+        group_name = i.group_id.group_name
+        gs = Group_Student.objects.filter(group_id=i.group_id)
+        for j in gs:
+            stu_name = j.student_id.first_name + ' ' + j.student_id.last_name
+            csv += 'Grade for: ' + str(stu_name) + ' in Group: ' + str(group_name) + '\n'
+            assessment_questions = Assessment_Question.objects.filter(assessment_id=assessment)
+            for q in assessment_questions:
+                csv += ',"'+q.question_id.question+'"'
+            csv += '\n'
+            for k in gs:
+                grades = Grade.objects.filter(grader=k.student_id, gradee=j.student_id,
+                                              assessment_question__in=assessment_questions)
+                grader_name = k.student_id.first_name + " " + k.student_id.last_name
+                csv += '"'+str(grader_name)+'"'
+                for g in grades:
+                    if g.completion:
+                        csv += ',"' + str(g.score)+'"'
+                    else:
+                        csv += ',incomplete'
+                csv += '\n'
+            csv += '\n'
+        csv += '\n'
     response = HttpResponse(
         content=csv.encode(),
         content_type="text/csv",

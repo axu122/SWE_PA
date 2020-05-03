@@ -179,56 +179,10 @@ class ProfessorAggregatedResults extends Component {
 
   downloadResults = () => {
       //ADD CODE FOR DOWNLOADING RESULTS
-    //--------------------------------------------------------------
     console.log("download results");
-    //function to get the cookie from req in order to handle the csrf token
-    function getCookie(name) {
-      var cookieValue = null;
-      if (document.cookie && document.cookie !== "") {
-        var cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].trim();
-          // Does this cookie string begin with the name we want?
-          if (cookie.substring(0, name.length + 1) === name + "=") {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-    }
-
-    //get csrf token in order to not have request blocked
-    var csrftoken = getCookie("csrftoken");
-    //--------------------------------------------------------------
-
-    console.log("downloading");
-    axios
-      .post(
-        "/downloadresults/",
-        {
-          email: localStorage.getItem("userEmail"),
-          type: localStorage.getItem("userType"),
-        },
-        {
-          headers: {
-            "X-CSRFToken": csrftoken,
-          },
-        }
-      )
-      .then(
-        (response) => {
-          var data = response.data;
-          console.log(response.data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
       this.setState({
           notificationDownload: true,
       });
-    //--------------------------------------------------------------
   };
 
   //  *------------ CLOSE NOTIFICATION ----------------*
@@ -345,6 +299,7 @@ class ProfessorAggregatedResults extends Component {
           selectTeam={this.selectTeamHandler}
           loggedInUser={localStorage.getItem("userEmail")}
           loggedInUserType={localStorage.getItem("userType")}
+          selectedAssessment={localStorage.getItem("selectedAssessment")}
         />
         <DetailedStudentResults
             open={this.state.openStudentModal}

@@ -110,7 +110,7 @@ const ProfessorAggregateResults = props=>{
                         Release Results
                     </Button>
                     <Button variant='outlined' color='primary'>
-                        <a href={"/downloadresults/?email="+props.loggedInUser+"&type="+props.loggedInUserType} style={{textDecoration:'none'}}>Download Results</a>
+                        <a href={"/downloadresults/?email="+props.loggedInUser+"&type="+props.loggedInUserType+"&assessment="+props.selectedAssessment} style={{textDecoration:'none'}}>Download Results</a>
                     </Button>
             </Grid>
 
