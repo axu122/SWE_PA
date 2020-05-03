@@ -5,6 +5,8 @@ import Moment from "moment";
 import ProfessorAggregateResults from "../components/DashboardProfessor/ProfessorAggregateResults";
 import ToDOModal from "../components/DashboardProfessor/ModalProfessor";
 import CreateModal from "../components/DashboardProfessor/CreateModal";
+import DetailedStudentResults from "../components/DashboardProfessor/DetailedStudentResults";
+
 import axios from "axios";
 
 // Nav
@@ -28,24 +30,96 @@ class ProfessorAggregatedResults extends Component {
     selected: localStorage.getItem("selectedAssessmentName"),
     selectedUser: false,
     selectedTeam: false,
+
+    openStudentModal:false,
+    detailedStudentResults:[],
+    didAssessment:false,
+    selectedStudent:null,
+
+    openTeamModal:false,
   };
 
   // *----------HANDLE MODAL METHODS------------------*
   selectStudentHandler = (e) => {
     console.log(this.state.allStudents[e]);
     this.setState({
-      todoSelected: this.state.allStudents[e],
-      selectedUser: true,
+      selectedStudent: this.state.allStudents[e],
     });
+    //--------------------------------------------------------------
+    console.log("student result modal");
+    //function to get the cookie from req in order to handle the csrf token
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        var cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    //get csrf token in order to not have request blocked
+    var csrftoken = getCookie("csrftoken");
+    //--------------------------------------------------------------
+
+    axios
+      .post(
+        "/studentdetailedresults/",
+        {
+          email: localStorage.getItem("userEmail"),
+          type: localStorage.getItem("userType"),
+          selectedAssessment: localStorage.getItem("selectedAssessment"),
+          selectedUser: this.state.allStudents[e],
+        },
+        {
+          headers: {
+            "X-CSRFToken": csrftoken,
+          },
+        }
+      )
+      .then(
+        (response) => {
+          var data = response.data;
+          console.log(response.data);
+          this.setState({
+              detailedStudentResults: data[0],
+              didAssessment: data[1],
+              openStudentModal:true,
+          });
+          console.log(this.state.selectedStudent)
+
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
   };
 
   selectTeamHandler = (e) => {
     console.log(this.state.allTeams[e]);
     this.setState({
       todoSelected: this.state.allTeams[e],
-      selectedTeam:true
+//      selectedTeam:true
     });
   };
+
+  handleClose = () => {
+    this.setState({
+      openStudentModal: false,
+      openTeamModal: false,
+    });
+  };
+
+
+
+
 
   //  *------------ Create Functions -------------*
   releaseResults = () => {
@@ -269,8 +343,15 @@ class ProfessorAggregatedResults extends Component {
           selected={this.state.selected}
           selectStudent={this.selectStudentHandler}
           selectTeam={this.selectTeamHandler}
+          loggedInUser={localStorage.getItem("userEmail")}
+          loggedInUserType={localStorage.getItem("userType")}
         />
-
+        <DetailedStudentResults
+            open={this.state.openStudentModal}
+            close={this.handleClose}
+            detailedStudentResults={this.state.detailedStudentResults}
+            info={this.state.selectedStudent}
+        />
         <SnackBar
           message="Downloading Results"
           open={this.state.notificationDownload}

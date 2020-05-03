@@ -64,7 +64,9 @@ def view_aggregated_results(request):
                 avg_score = 0
                 # If it is not then we do nothing right now, but we could make all the other grades
                 # of this student in the db 0. Right now, we just do math to make it 0
+                didAssessment = False
                 if(len(grader)==0):
+                    didAssessment = True
                     for grad in gradee:
                         # If score isn't filled out the value of it is NONE
 
@@ -79,9 +81,11 @@ def view_aggregated_results(request):
 
                 studentsGrid.append(
                     {
+                        "user_id": user.id,
                         "name": name,
                         "team": t,
-                        "avg_score": round(avg_score,2)
+                        "avg_score": round(avg_score,2),
+                        "completed": didAssessment
                     }
                 )
             print(studentsGrid)
@@ -133,7 +137,7 @@ def release_results(request):
     return Response(b, status=status.HTTP_200_OK)
 
 @requires_csrf_token
-@api_view(['POST', 'GET'])
+@api_view(['GET'])
 def download_results(request):
     """
         List all code snippets, or create a new snippet.
@@ -143,7 +147,8 @@ def download_results(request):
     #t = data.get("type")
     # selectedClass = data.get("selectedClass")
     # selectedAssessment = data.get("selectedAssessment")
-
+    email = request.query_params.get('email')
+    user_type = request.query_params.get('type')
     csv = "a,b,c\nd,,f\n"
 
     response = HttpResponse(
@@ -153,3 +158,52 @@ def download_results(request):
     response["Content-Disposition"] = 'attachment; filename="assessment_results.csv"'
     return response
 
+@requires_csrf_token
+@api_view(['POST'])
+def view_student_detailed(request):
+    data = request.data
+    email = data.get("email")
+    t = data.get("type")
+    selectedAssessment = data.get("selectedAssessment")
+    user = data.get("selectedUser")
+
+    student = User.objects.get(pk=user['user_id'])
+
+    res =list()
+    qpks = [x for x in range(1, 11)]
+    qs = Question.objects.filter(pk__in=qpks)
+    aqs = Assessment_Question.objects.filter(assessment_id=selectedAssessment, question_id__in=qs)
+
+    didAssessment = True
+    grader = Grade.objects.filter(grader=student, assessment_question__in=aqs, completion=False)
+
+    if len(grader) > 0:
+        didAssessment = False
+
+    for i in qs:
+        aq = Assessment_Question.objects.get(assessment_id=selectedAssessment, question_id=i)
+        grades = Grade.objects.filter(gradee=student, assessment_question=aq)
+        gradeList = list()
+        for j in grades:
+            if j.completion == True:
+                gradeList.append(
+                    {
+                        "grader": j.grader.first_name + " " +j.grader.last_name,
+                        "score": j.score
+                    }
+                )
+            else:
+                gradeList.append(
+                    {
+                        "grader": j.grader.first_name + " " +j.grader.last_name,
+                        "score": "Didn't complete assessment"
+                    }
+                )
+        res.append(
+            {
+                "question_id": i.id,
+                "question": i.question,
+                "grades": gradeList
+            }
+        )
+    return Response([res, didAssessment], status=status.HTTP_200_OK)
