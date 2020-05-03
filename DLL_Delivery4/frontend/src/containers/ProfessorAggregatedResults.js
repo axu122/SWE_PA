@@ -133,8 +133,6 @@ class ProfessorAggregatedResults extends Component {
       .post(
         "/downloadresults/",
         {
-//          members: [],
-//          overallGrade: "0",
           email: localStorage.getItem("userEmail"),
           type: localStorage.getItem("userType"),
         },

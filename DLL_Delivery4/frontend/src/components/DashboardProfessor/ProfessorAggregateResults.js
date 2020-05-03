@@ -109,8 +109,8 @@ const ProfessorAggregateResults = props=>{
                     <Button variant='outlined' color='primary' onClick={props.releaseResults}>
                         Release Results
                     </Button>
-                    <Button variant='outlined' color='primary' onClick={props.download}>
-                        Download Results
+                    <Button variant='outlined' color='primary'>
+                        <a href="/downloadresults/" style={{textDecoration:'none'}}>Download Results</a>
                     </Button>
             </Grid>
 
