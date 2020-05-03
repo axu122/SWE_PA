@@ -31,7 +31,7 @@ const ProfessorAggregateResults = props=>{
                         <Typography variant='h5' color='primary'> <b>{e.name}</b> </Typography>
                         <Typography variant='subtitle1'> <b>Team: </b>{e.team}</Typography>
                         <Typography variant='subtitle1'> <b>Overall Grade:</b> {e.avg_score}/5 </Typography>
-                        <Button outlined color="primary" onClick={()=>props.studentDelete(i)}> Delete </Button>
+                        <Button outlined color="primary" onClick={()=>props.studentDelete(i)}> {e.completed==true?"":"REMIND"} </Button>
                     </CardContent>
                     </CardActions>
                 </Card>
@@ -110,7 +110,7 @@ const ProfessorAggregateResults = props=>{
                         Release Results
                     </Button>
                     <Button variant='outlined' color='primary'>
-                        <a href="/downloadresults/" style={{textDecoration:'none'}}>Download Results</a>
+                        <a href={"/downloadresults/?email="+props.loggedInUser+"&type="+props.loggedInUserType+"&assessment="+props.selectedAssessment} style={{textDecoration:'none'}}>Download Results</a>
                     </Button>
             </Grid>
 

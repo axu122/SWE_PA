@@ -35,5 +35,6 @@ urlpatterns = [
     path('getquestions/', allassessmentsprof.view_all_questions),
     path('makenewquestion/', allassessmentsprof.add_question),
     path('releaseresults/', profaggregatedresults.release_results),
-    path('downloadresults/', profaggregatedresults.download_results)
+    path('downloadresults/', profaggregatedresults.download_results),
+    path('studentdetailedresults/', profaggregatedresults.view_student_detailed)
 ]
