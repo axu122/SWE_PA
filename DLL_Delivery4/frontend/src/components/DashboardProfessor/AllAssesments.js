@@ -30,7 +30,6 @@ const StudentHome = props=>{
                         <Typography variant='h5'> <b>{e.fields.assessment_name}</b> </Typography>
                         <Typography variant='subtitle1' > <b>Start date:</b> {Moment(e.fields.start_date).format('MMMM Do YYYY')}</Typography>
                         <Typography variant='subtitle1' > <b>Due date:</b> {Moment(e.fields.due_date).format('MMMM Do YYYY')}</Typography>
-                        <Typography variant='subtitle2' > <b>Class Overall: </b> 5/5 </Typography>
 
                     </CardContent>
                     </CardActions>
@@ -44,7 +43,7 @@ const StudentHome = props=>{
         assessmentsGrid=props.assessments.map(e=>(
             <Grid item xs={12} md={4} sm={6}>
 
-                <Typography variant='subtitle2'> No Assessments</Typography>
+                <Typography variant='subtitle2'> No Ongoing Assessments</Typography>
 
             </Grid>
 
@@ -61,7 +60,6 @@ const StudentHome = props=>{
                         <Typography align='left' variant='h5'> <b>{e.fields.assessment_name}</b> <Typography align='left' variant='subtitle2' style={{color:'#FF5B5C'}}>(closed)</Typography> </Typography>
                         <Typography variant='subtitle1' > <b>Start date:</b> {Moment(e.fields.start_date).format('MMMM Do YYYY')}</Typography>
                         <Typography variant='subtitle1' > <b>Due date:</b> {Moment(e.fields.due_date).format('MMMM Do YYYY')}</Typography>
-                        <Typography variant='subtitle2' > <b>Class Overall: </b> 5/5 </Typography>
                        <Typography variant='subtitle2'> Click to View Results </Typography>
                     </CardContent>
                     </CardActions>
@@ -94,7 +92,7 @@ const StudentHome = props=>{
             <Grid item xs={12} md={4} sm={6}>
                 
                 
-                <Typography variant='subtitle1' > No Assessments in the to grade!</Typography>
+                <Typography variant='subtitle1' > No Assessments Cosed!</Typography>
                 
             </Grid>
             

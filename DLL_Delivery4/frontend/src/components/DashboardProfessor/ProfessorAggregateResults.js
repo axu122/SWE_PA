@@ -26,14 +26,19 @@ const ProfessorAggregateResults = props=>{
         studentGrid=props.students.map((e,i)=>(
             <Grid item xs={12} md={4} sm={6} key={e.id}>
                 <Card>
-                    <CardActions onClick={()=>props.selectStudent(i)}>
+
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
-                        <Typography variant='h5' color='primary'> <b>{e.name}</b> </Typography>
+                    <CardActions onClick={()=>props.selectStudent(i)}>
+                        <Typography variant='h5' color='primary'> <b>{e.name}</b>
+                            <Typography align='left' variant='subtitle2' style={{color:'#FF5B5C'}}>
+                                {e.completed==true?"":"Didn't Complete"}
+                            </Typography>
+                        </Typography>
                         <Typography variant='subtitle1'> <b>Team: </b>{e.team}</Typography>
-                        <Typography variant='subtitle1'> <b>Overall Grade:</b> {e.avg_score}/5 </Typography>
-                        <Button outlined color="primary" onClick={()=>props.studentDelete(i)}> {e.completed==true?"":"REMIND"} </Button>
-                    </CardContent>
+                        <Typography variant='subtitle1' style={e.completed==false?{color:'#FF5B5C'}:{color:'primary'}}> <b>Overall Grade:</b> {e.avg_score}/5 </Typography>
                     </CardActions>
+                    <Button outlined color="primary" onClick={()=>props.studentRemind(i)}> {e.completed==true?"":"REMIND"} </Button>
+                    </CardContent>
                 </Card>
             </Grid>
 
@@ -117,7 +122,7 @@ const ProfessorAggregateResults = props=>{
             <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-between'}}>
                 <Grid item sm={11}>
                     <Typography variant="h4">
-                       Teams
+                       Teams: (Click to see Detailed Results)
                     </Typography>
                 </Grid>
                 {teamsGrid}
@@ -128,7 +133,7 @@ const ProfessorAggregateResults = props=>{
             <Grid item container sm={10} xs={10}>
                 <Grid item sm={11}>
                     <Typography variant="h4">
-                       Students
+                       Students: (Click to see Detailed Results)
                     </Typography>
                 </Grid>
             </Grid>
