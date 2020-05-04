@@ -247,6 +247,7 @@ class ProfessorAggregatedResults extends Component {
     this.setState({
       notificationRelease: false,
       notificationDownload: false,
+      notificationRemind:false,
     });
   };
 
