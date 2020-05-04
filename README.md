@@ -1,8 +1,6 @@
 # DLL-Delivery4
 
-- Create the login interface
-    - If login is done by student, show student landing age
-    - If login is done by instructor, show instructor landing page  
+- Finished Requirements in Rubric.
 
 - Frontend: React
 - Backend: Django
@@ -27,9 +25,9 @@ Professor:
     P: SoftwareEngineering
     
 Student:
-    U: ry@gmail.com
+    U: bh@bc.com
     |
-    P: 123456789
+    P: 123
    
 To Access Admin - change URL after port number to "/admin/"
 
@@ -37,3 +35,5 @@ Credentials:
     U: david
     |
     P: z9e5ru0716
+    
+Look at User table to find example student and professor users.
