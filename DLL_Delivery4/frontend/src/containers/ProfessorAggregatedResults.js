@@ -6,6 +6,7 @@ import ProfessorAggregateResults from "../components/DashboardProfessor/Professo
 import ToDOModal from "../components/DashboardProfessor/ModalProfessor";
 import CreateModal from "../components/DashboardProfessor/CreateModal";
 import DetailedStudentResults from "../components/DashboardProfessor/DetailedStudentResults";
+import DetailedTeamResults from "../components/DashboardProfessor/DetailedTeamResults";
 
 import axios from "axios";
 
@@ -23,13 +24,12 @@ class ProfessorAggregatedResults extends Component {
     changePassword: false,
     notificationRelease: false,
     notificationDownload: false,
-
+    notificationRemind: false,
+    message:null,
 
     allStudents: [],
     allTeams: [],
     selected: localStorage.getItem("selectedAssessmentName"),
-    selectedUser: false,
-    selectedTeam: false,
 
     openStudentModal:false,
     detailedStudentResults:[],
@@ -37,6 +37,8 @@ class ProfessorAggregatedResults extends Component {
     selectedStudent:null,
 
     openTeamModal:false,
+    detailedTeamResults:[],
+    selectedTeam:null,
   };
 
   // *----------HANDLE MODAL METHODS------------------*
@@ -105,9 +107,60 @@ class ProfessorAggregatedResults extends Component {
   selectTeamHandler = (e) => {
     console.log(this.state.allTeams[e]);
     this.setState({
-      todoSelected: this.state.allTeams[e],
-//      selectedTeam:true
+      selectedTeam: this.state.allTeams[e],
     });
+      //function to get the cookie from req in order to handle the csrf token
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        var cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    //get csrf token in order to not have request blocked
+    var csrftoken = getCookie("csrftoken");
+    //--------------------------------------------------------------
+
+    axios
+      .post(
+        "/teamdetailedresults/",
+        {
+          email: localStorage.getItem("userEmail"),
+          type: localStorage.getItem("userType"),
+          selectedAssessment: localStorage.getItem("selectedAssessment"),
+          selectedTeam: this.state.allTeams[e],
+        },
+        {
+          headers: {
+            "X-CSRFToken": csrftoken,
+          },
+        }
+      )
+      .then(
+        (response) => {
+          var data = response.data;
+          console.log(response.data);
+          this.setState({
+              detailedTeamResults: data,
+//              didAssessment: data[1],
+              openTeamModal:true,
+          });
+          console.log(this.state.selectedStudent)
+
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   };
 
   handleClose = () => {
@@ -200,9 +253,58 @@ class ProfessorAggregatedResults extends Component {
   // *------ Remind STUDENT ---------*
   remind = (index) => {
 //    this.state.allStudents.splice(index, 1);
-    this.setState({
-      allStudents: this.state.allStudents,
-    });
+    console.log("In remind")
+    console.log(index)
+    console.log(this.state.allStudents[index])
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        var cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    //get csrf token in order to not have request blocked
+    var csrftoken = getCookie("csrftoken");
+    //--------------------------------------------------------------
+
+    axios
+      .post(
+        "/remind/",
+        {
+          selectedAssessment: localStorage.getItem("selectedAssessment"),
+          email: localStorage.getItem("userEmail"),
+          type: localStorage.getItem("userType"),
+          student: this.state.allStudents[index]
+        },
+        {
+          headers: {
+            "X-CSRFToken": csrftoken,
+          },
+        }
+      )
+      .then(
+        (response) => {
+          var data = response.data;
+          console.log(response.data);
+          this.setState({
+              notificationRemind: true,
+              message: "Reminded " + this.state.allStudents[index]["name"]
+            });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
   };
 
   changePassword = () => {
@@ -293,7 +395,7 @@ class ProfessorAggregatedResults extends Component {
           teams={this.state.allTeams}
           releaseResults={this.releaseResults}
           download={this.downloadResults}
-          studentDelete={this.remind}
+          studentRemind={this.remind}
           selected={this.state.selected}
           selectStudent={this.selectStudentHandler}
           selectTeam={this.selectTeamHandler}
@@ -307,6 +409,12 @@ class ProfessorAggregatedResults extends Component {
             detailedStudentResults={this.state.detailedStudentResults}
             info={this.state.selectedStudent}
         />
+        <DetailedTeamResults
+            open={this.state.openTeamModal}
+            close={this.handleClose}
+            detailedTeamResults={this.state.detailedTeamResults}
+            info={this.state.selectedTeam}
+        />
         <SnackBar
           message="Downloading Results"
           open={this.state.notificationDownload}
@@ -318,12 +426,11 @@ class ProfessorAggregatedResults extends Component {
           open={this.state.notificationRelease}
           handleClose={this.handleCloseNot}
         />
-        {this.state.selectedUser === true ? (
-          <Redirect to="/professorHome/aggregatedresults/user" />
-        ) : null}
-        {this.state.selectedTeam === true ? (
-          <Redirect to="/professorHome/aggregatedresults/team" />
-        ) : null}
+        <SnackBar
+          message={this.state.message}
+          open={this.state.notificationRemind}
+          handleClose={this.handleCloseNot}
+        />
         {this.state.changePassword === true ? (
           <Redirect to="/changepassword" />
         ) : null}

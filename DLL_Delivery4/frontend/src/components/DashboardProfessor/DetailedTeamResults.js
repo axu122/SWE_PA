@@ -12,43 +12,54 @@ import Slide from '@material-ui/core/Slide';
 
 
 export default function FormDialog(props) {
-  let detailedStudentResults;
+  let detailedTeamResults;
 
   if(props.info !==null){
-    detailedStudentResults= (
+    detailedTeamResults= (
 
         <React.Fragment>
-            <Typography variant="h6" id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
-            <b> {props.info.name}'s</b> Detailed Scores
+            <Typography variant="h4" id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
+            Group <b> {props.info.name}'s</b> Detailed Scores
             </Typography>
             <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
             (0=Lowest / 5=Best)
             </Typography>
               {
-                props.detailedStudentResults.map(eMC=>(
+                props.detailedTeamResults.map(eMC=>(
                     <React.Fragment>
 
-                        <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
-                        <b>{eMC.question}</b>
+                        <Typography variant="h5" id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
+                        Grades for <b>{eMC.name}</b>
                         </Typography>
 
                         {
-                            eMC.grades.map(eOR=>(
+                            eMC.res.map(eOR=>(
                                 <React.Fragment>
 
                                     <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
-                                    {eOR.grader}: {eOR.score}
+                                    <b>{eOR.question}</b>
                                     </Typography>
-
+                                        {
+                                            eOR.scores.map(eSC=>(
+                                                <React.Fragment>
+                                                    <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
+                                                    {eSC.grader}: {eSC.score}
+                                                    </Typography>
+                                                </React.Fragment>
+                                            ))
+                                        }
                                 </React.Fragment>
                             ))
                         }
+                     <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
+                        <hr></hr>
+                     </Typography>
                     </React.Fragment>
                 ))
               }
 
               <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
-                <b>Total Assessment Grade: {props.info.avg_score}</b>
+                <b>Team Average Question Grade: {props.info.avg_score}</b>
               </Typography>
 
         </React.Fragment>
@@ -60,12 +71,8 @@ export default function FormDialog(props) {
   return (
     <div>
       <Dialog open={props.open} onClose={props.close} aria-labelledby="form-dialog-title" >
-        <DialogTitle id="form-dialog-title">{props.info?props.info.name:null}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Detailed Results
-          </DialogContentText>
-         {detailedStudentResults}
+         {detailedTeamResults}
 
         </DialogContent>
         <DialogActions>

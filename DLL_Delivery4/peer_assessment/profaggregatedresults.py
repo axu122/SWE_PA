@@ -5,11 +5,16 @@ from rest_framework.response import Response
 from peer_assessment.models import *
 from django.core import serializers
 from django.http import HttpResponse
+from email.message import EmailMessage
 
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 import datetime
 import json
+import smtplib
+
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 @requires_csrf_token
@@ -95,6 +100,7 @@ def view_aggregated_results(request):
                 team_avg_score = 0
             teamsGrid.append(
                 {
+                    "team_id": team.id,
                     "name": t,
                     "members": stu,
                     "avg_score": round(team_avg_score,2)
@@ -206,10 +212,14 @@ def view_student_detailed(request):
 
     for i in qs:
         aq = Assessment_Question.objects.get(assessment_id=selectedAssessment, question_id=i)
+        completed = True
+        gradergrades = Grade.objects.filter(grader=student, assessment_question=aq, completion=False)
+        if len(gradergrades)> 0:
+            completed = False
         grades = Grade.objects.filter(gradee=student, assessment_question=aq)
         gradeList = list()
         for j in grades:
-            if j.completion == True:
+            if j.completion:
                 gradeList.append(
                     {
                         "grader": j.grader.first_name + " " +j.grader.last_name,
@@ -227,7 +237,86 @@ def view_student_detailed(request):
             {
                 "question_id": i.id,
                 "question": i.question,
-                "grades": gradeList
+                "grades": gradeList,
+                "completion": completed
             }
         )
     return Response([res, didAssessment], status=status.HTTP_200_OK)
+
+@requires_csrf_token
+@api_view(['POST'])
+def view_team_detailed(request):
+    data = request.data
+    t = data.get("selectedTeam")
+    selectedAssessment = data.get("selectedAssessment")
+    print(t)
+    print(selectedAssessment)
+
+    assessment = Assessment.objects.get(pk=selectedAssessment)
+    team = Group.objects.get(pk=t["team_id"])
+
+    gs = Group_Student.objects.filter(group_id=team)
+
+    res = list()
+
+    for j in gs:
+        stu_name = j.student_id.first_name + ' ' + j.student_id.last_name
+        assessment_questions = Assessment_Question.objects.filter(assessment_id=assessment)
+        grades = list()
+        for q in assessment_questions:
+            gr = Grade.objects.filter(gradee=j.student_id, assessment_question=q)
+            sc = list()
+            for s in gr:
+                if s.completion:
+                    sc.append(
+                        {
+                            "grader": s.grader.first_name + " " + s.grader.last_name,
+                            "score": s.score
+                        }
+                    )
+                else:
+                    sc.append(
+                        {
+                            "grader": s.grader.first_name + " " + s.grader.last_name,
+                            "score": "Didn't complete assessment"
+                        }
+                    )
+
+            grades.append(
+                {
+                    "question_id": q.question_id.id,
+                    "question": q.question_id.question,
+                    "scores": sc
+                }
+            )
+        res.append(
+            {
+                "name": stu_name,
+                "res": grades
+            }
+        )
+
+    return Response(res, status=status.HTTP_200_OK)
+
+@requires_csrf_token
+@api_view(['POST'])
+def remind_student(request):
+    data = request.data
+    prof = data.get("email")
+    assess = data.get("selectedAssessment")
+    stu = data.get("student")
+    type = data.get("tpye")
+    print(data)
+
+    assessment = Assessment.objects.get(pk=assess)
+    # professor = User.objects.get(email=prof)
+    student = User.objects.get(pk=stu["user_id"])
+
+    subject = 'Reminder that you missed completing an assessment'
+    message = 'This is an email reminding you that you failed to complete assessment: ' + \
+                    str(assessment.assessment_name) + ', for team: ' + str(stu["team"]) + \
+                    ' by the deadline. Your Score for this assessment is 0'
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = ['yangud@bc.edu', str(student.email)]
+    send_mail(subject, message, email_from, recipient_list)
+    return Response("reminded", status=status.HTTP_200_OK)

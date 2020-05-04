@@ -25,7 +25,6 @@ def view_professor_homepage(request):
 
     b="F"
     #Try to write to database to add assessment to list, dummy code in place
-    
 
 
     try:
