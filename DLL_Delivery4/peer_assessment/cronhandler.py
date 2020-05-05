@@ -21,7 +21,8 @@ def send_email_at_midnight():
             i.save()
             subject = 'Reminder that peer assessment ' + str(i.assessment_name) + ' is now open!'
             message = 'This is an email reminding you that the window to complete assessment: ' + \
-                      str(i.assessment_name) + ' has started.'
+                      str(i.assessment_name) + ' has started.\n\n'
+            message += 'Please go to http://cscigpu04.bc.edu:8001/ to log in and complete the assessment'
             # message = 'This is an email reminding you that the window to complete assessment: ' + \
             #           str(i.assessment_name) + ' has started.' + str(len(recipient_list))
             email_from = settings.EMAIL_HOST_USER
