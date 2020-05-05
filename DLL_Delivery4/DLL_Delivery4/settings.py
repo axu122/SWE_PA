@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_crontab",
 ]
 
 MIDDLEWARE = [
@@ -133,4 +134,9 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/src/Assets'),
+]
+
+CRONJOBS = [
+    # ('0 0 * * *', 'peer_assessment.cronhandler.send_email_at_midnight')
+    ('*/1 * * * *', 'peer_assessment.cronhandler.send_email_at_midnight')
 ]
