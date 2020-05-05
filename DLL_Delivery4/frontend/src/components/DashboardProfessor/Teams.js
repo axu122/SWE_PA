@@ -31,10 +31,10 @@ const StudentHome = props=>{
                         <Typography variant='subtitle1'> <b>Overall Grade:</b> 5/5 </Typography>
                         <Button outlined color="primary" onClick={()=>props.studentDelete(i)}> Delete </Button>
                     </CardContent>
-                    
+
                 </Card>
             </Grid>
-            
+
         ))
     }
 //    }f(props.students.length>0){
@@ -57,12 +57,12 @@ const StudentHome = props=>{
     if(props.students.length===0){
         studentGrid=props.students.map(e=>(
             <Grid item xs={12} md={4} sm={6}>
-                
-                
+
+
                 <Typography variant='subtitle2'> No students created yet!</Typography>
-                
+
             </Grid>
-            
+
         ))
     }
 
@@ -101,11 +101,11 @@ const StudentHome = props=>{
     if(props.teams.length===0){
         teamsGrid=props.teams.map(e=>(
             <Grid item xs={12} md={4} sm={6}>
-                
+
                 <Typography variant='subtitle2'> No teams created yet</Typography>
-                
+
             </Grid>
-            
+
         ))
     }
 
@@ -119,16 +119,10 @@ const StudentHome = props=>{
                        All Teams
                     </Typography>
                 </Grid>
-                <Grid item sm={1}>
-
-                    <Button variant='outlined' color='primary' onClick={props.openCreateModalTeam}>
-                        New Team
-                    </Button>
-                </Grid>
             </Grid>
 
             <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-between'}}>
-                
+
                 {teamsGrid}
 
 
@@ -140,17 +134,11 @@ const StudentHome = props=>{
                        Students
                     </Typography>
                 </Grid>
-                <Grid item sm={1}>
-
-                    <Button variant='outlined' color='primary' onClick={props.openCreate}>
-                        New Student
-                    </Button>
-                </Grid>
             </Grid>
 
 
             <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-evenly'}}>
-                
+
                 {studentGrid}
 
 
