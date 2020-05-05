@@ -17,8 +17,8 @@ def send_email_at_midnight():
                 group_students = Group_Student.objects.filter(group_id=g.group_id)
                 for gs in group_students:
                     recipient_list.append(str(gs.student_id.email))
-            # i.sent_email = True
-            # i.save()
+            i.sent_email = True
+            i.save()
             subject = 'Reminder that peer assessment ' + str(i.assessment_name) + ' is now open!'
             message = 'This is an email reminding you that the window to complete assessment: ' + \
                       str(i.assessment_name) + ' has started.'
