@@ -27,9 +27,7 @@ const StudentHome = props=>{
 
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
                         <Typography variant='h5' color='primary'> <b>{e.name}</b> </Typography>
-                        <Typography variant='subtitle1'> <b>Team: </b>{e.team}</Typography>
-                        <Typography variant='subtitle1'> <b>Overall Grade:</b> 5/5 </Typography>
-                        <Button outlined color="primary" onClick={()=>props.studentDelete(i)}> Delete </Button>
+                        <Typography variant='subtitle1'> <b>Team: </b>{e.team}</Typography>                     
                     </CardContent>
 
                 </Card>
