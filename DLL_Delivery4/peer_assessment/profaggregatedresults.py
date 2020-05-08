@@ -77,7 +77,7 @@ def view_aggregated_results(request):
 
                         if(grad.assessment_question.question_id.type=='Multiple Choice' and grad.completion==True):
                             score += int(grad.score)
-                        count += 1
+                            count += 1
                     avg_score = score/count
                 team_score_sum += avg_score
                 name = user.first_name + " " + user.last_name
