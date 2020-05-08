@@ -31,7 +31,6 @@ const ProfessorHome = props=>{
                     <CardActions onClick={()=>props.selectClass(i)}>
                     <CardContent style={{display:'flex', alignItems:'flex-start', flexDirection:'column'}}>
                         <Typography variant='h5'> <b>{e.fields.class_name}</b> </Typography>
-                        <Typography variant='subtitle1'> <b>Teams: </b> 5</Typography>
                         <Typography variant='subtitle2'> Click To See Class </Typography>
                     </CardContent>
                     </CardActions>
