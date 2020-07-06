@@ -1,5 +1,7 @@
 # DLL-Delivery4
 
+A peer assessment platform that functions similarly to canvas. Was originally created as final project for SWE class, and was graded a perfect score. Coded in python, JS, React, html, and utilized packages found in Django
+
 - Finished Requirements in Rubric.
 
 - Frontend: React
