@@ -38,7 +38,7 @@ Keras-Preprocessing==1.0.5
 keyring==10.6.0
 keyrings.alt==3.0
 leveldb==0.1
-lxml==4.2.1
+lxml==4.9.1
 Mako==1.0.7
 MarkupSafe==1.0
 matplotlib==2.1.1
