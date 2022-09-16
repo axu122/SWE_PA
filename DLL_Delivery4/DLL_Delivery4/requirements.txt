@@ -39,7 +39,7 @@ keyring==10.6.0
 keyrings.alt==3.0
 leveldb==0.1
 lxml==4.2.1
-Mako==1.0.7
+Mako==1.2.2
 MarkupSafe==1.0
 matplotlib==2.1.1
 mock==2.0.0
